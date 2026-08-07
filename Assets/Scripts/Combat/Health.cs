@@ -39,6 +39,14 @@ namespace Warana.Combat
         /// <summary>(vida atual, vida máxima) — gancho para barra de vida / HUD.</summary>
         public event Action<float, float> Changed;
 
+        /// <summary>
+        /// (dano aplicado, direção do golpe) — disparado só quando o dano de fato entra.
+        /// Existe separado de <see cref="Changed"/> porque a reação de quem apanha não é
+        /// a mesma de quem exibe a vida: <see cref="Changed"/> também dispara ao curar e
+        /// no OnEnable, e uma animação de dano não pode tocar nesses casos.
+        /// </summary>
+        public event Action<float, Vector2> Damaged;
+
         public event Action Died;
 
         public float Current { get; private set; }
@@ -90,6 +98,7 @@ namespace Warana.Combat
                 _body.linearVelocity = direction.normalized * knockback;
 
             Changed?.Invoke(Current, maxHealth);
+            Damaged?.Invoke(amount, direction.normalized);
 
             if (Current > 0f) return;
 
