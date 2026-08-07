@@ -18,6 +18,7 @@ namespace Warana.Player
         [SerializeField] private string moveActionName = "Move";
         [SerializeField] private string jumpActionName = "Jump";
         [SerializeField] private string attackActionName = "Attack";
+        [SerializeField] private string channelActionName = "Channel";
 
         [Header("Tuning")]
         [Tooltip("Valores de |X| abaixo disso contam como zero (evita drift de analógico).")]
@@ -28,6 +29,7 @@ namespace Warana.Player
         private InputAction _moveAction;
         private InputAction _jumpAction;
         private InputAction _attackAction;
+        private InputAction _channelAction;
 
         /// <summary>Eixo horizontal já com deadzone aplicada, em [-1, 1].</summary>
         public float MoveX { get; private set; }
@@ -38,6 +40,11 @@ namespace Warana.Player
 
         public bool AttackHeld { get; private set; }
         public bool AttackPressedThisFrame { get; private set; }
+
+        /// <summary>Canalização (RMB). É um estado mantido, não um toque: só o "held" importa.</summary>
+        public bool ChannelHeld { get; private set; }
+        public bool ChannelPressedThisFrame { get; private set; }
+        public bool ChannelReleasedThisFrame { get; private set; }
 
         private void Awake()
         {
@@ -64,6 +71,7 @@ namespace Warana.Player
             _moveAction = _map.FindAction(moveActionName, throwIfNotFound: false);
             _jumpAction = _map.FindAction(jumpActionName, throwIfNotFound: false);
             _attackAction = _map.FindAction(attackActionName, throwIfNotFound: false);
+            _channelAction = _map.FindAction(channelActionName, throwIfNotFound: false);
 
             if (_moveAction == null || _jumpAction == null)
             {
@@ -75,6 +83,9 @@ namespace Warana.Player
             // Ataque é opcional: sem a action o personagem ainda anda e pula.
             if (_attackAction == null)
                 Debug.LogWarning($"[PlayerInputHandler] Action '{attackActionName}' não encontrada; o ataque fica desativado.", this);
+
+            if (_channelAction == null)
+                Debug.LogWarning($"[PlayerInputHandler] Action '{channelActionName}' não encontrada; a canalização fica desativada.", this);
         }
 
         private void OnEnable() => _map?.Enable();
@@ -94,10 +105,17 @@ namespace Warana.Player
             JumpPressedThisFrame = _jumpAction.WasPressedThisFrame();
             JumpReleasedThisFrame = _jumpAction.WasReleasedThisFrame();
 
-            if (_attackAction == null) return;
+            if (_attackAction != null)
+            {
+                AttackHeld = _attackAction.IsPressed();
+                AttackPressedThisFrame = _attackAction.WasPressedThisFrame();
+            }
 
-            AttackHeld = _attackAction.IsPressed();
-            AttackPressedThisFrame = _attackAction.WasPressedThisFrame();
+            if (_channelAction == null) return;
+
+            ChannelHeld = _channelAction.IsPressed();
+            ChannelPressedThisFrame = _channelAction.WasPressedThisFrame();
+            ChannelReleasedThisFrame = _channelAction.WasReleasedThisFrame();
         }
 
         private void ResetState()
@@ -108,6 +126,9 @@ namespace Warana.Player
             JumpReleasedThisFrame = false;
             AttackHeld = false;
             AttackPressedThisFrame = false;
+            ChannelHeld = false;
+            ChannelPressedThisFrame = false;
+            ChannelReleasedThisFrame = false;
         }
     }
 }

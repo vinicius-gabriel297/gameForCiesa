@@ -24,6 +24,7 @@ namespace Warana.Player
 
         private PlayerController2D _controller;
         private PlayerAttack _attack;
+        private PlayerChannel _channel;
         private Rigidbody2D _body;
 
         private static readonly int SpeedHash = Animator.StringToHash(WaranaAnimation.Param.Speed);
@@ -31,6 +32,7 @@ namespace Warana.Player
         private static readonly int VelocityYHash = Animator.StringToHash(WaranaAnimation.Param.VelocityY);
         private static readonly int WalkHash = Animator.StringToHash(WaranaAnimation.Param.Walk);
         private static readonly int AttackHash = Animator.StringToHash(WaranaAnimation.Param.Attack);
+        private static readonly int ChannelingHash = Animator.StringToHash(WaranaAnimation.Param.Channeling);
         private static readonly int DeadHash = Animator.StringToHash(WaranaAnimation.Param.Dead);
 
         /// <summary>
@@ -47,6 +49,7 @@ namespace Warana.Player
         {
             _controller = GetComponent<PlayerController2D>();
             _attack = GetComponent<PlayerAttack>();
+            _channel = GetComponent<PlayerChannel>();
             _body = GetComponent<Rigidbody2D>();
 
             if (animator == null) animator = GetComponentInChildren<Animator>();
@@ -76,6 +79,7 @@ namespace Warana.Player
             animator.SetFloat(VelocityYHash, velocity.y);
             animator.SetBool(GroundedHash, _controller.IsGrounded);
             animator.SetBool(WalkHash, walkMode);
+            animator.SetBool(ChannelingHash, _channel != null && _channel.IsChanneling);
 
             UpdateFacing();
         }

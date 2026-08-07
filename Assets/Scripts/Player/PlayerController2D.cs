@@ -193,16 +193,7 @@ namespace Warana.Player
         {
             if (Mathf.Approximately(inputX, 0f)) return;
 
-            int direction = inputX > 0f ? 1 : -1;
-            if (direction == _facing) return;
-
-            _facing = direction;
-
-            if (!flipWithScale) return;
-
-            Vector3 scale = transform.localScale;
-            scale.x = Mathf.Abs(scale.x) * _facing;
-            transform.localScale = scale;
+            SetFacing(inputX > 0f ? 1 : -1);
         }
 
         private PlayerAbility ResolveActiveAbility()
@@ -229,6 +220,23 @@ namespace Warana.Player
 
         /// <summary>Bloqueia o input de movimento sem desligar a física (knockback, diálogo).</summary>
         public void FreezeControl(bool frozen) => _controlFrozen = frozen;
+
+        /// <summary>
+        /// Vira o personagem sem passar pelo movimento. Existe para os estados em que
+        /// o deslocamento está congelado mas a mira continua livre — a canalização é o caso.
+        /// </summary>
+        public void SetFacing(int direction)
+        {
+            if (direction == 0 || direction == _facing) return;
+
+            _facing = direction > 0 ? 1 : -1;
+
+            if (!flipWithScale) return;
+
+            Vector3 scale = transform.localScale;
+            scale.x = Mathf.Abs(scale.x) * _facing;
+            transform.localScale = scale;
+        }
 
         /// <summary>Zera o estado de pulo — útil ao terminar um dash ou wall jump.</summary>
         public void CancelJumpState() => _isJumping = false;

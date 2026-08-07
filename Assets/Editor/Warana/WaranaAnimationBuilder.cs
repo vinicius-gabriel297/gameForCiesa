@@ -14,9 +14,12 @@ namespace Warana.EditorTools
     /// </summary>
     public static class WaranaAnimationBuilder
     {
-        private const string SourceRoot = "Assets/Animations/warana";
-        private const string ClipFolder = "Assets/Animations/Warana/Clips";
-        private const string ControllerPath = "Assets/Animations/Warana/Warana.controller";
+        // A pasta foi renomeada de 'warana' para 'Piatã' quando o personagem ganhou nome
+        // próprio (Waraná é o orbe). Os assets gerados continuam com o prefixo Warana_
+        // para não invalidar os GUIDs já referenciados pelas cenas.
+        private const string SourceRoot = "Assets/Animations/Piatã";
+        private const string ClipFolder = "Assets/Animations/Piatã/Clips";
+        private const string ControllerPath = "Assets/Animations/Piatã/Warana.controller";
 
         /// <summary>Alpha acima disso conta como pixel desenhado ao procurar o chão do sprite.</summary>
         private const byte OpaqueThreshold = 8;
@@ -52,6 +55,9 @@ namespace Warana.EditorTools
             new ClipDef(WaranaAnimation.State.Jump,   "jumping",      0, 4, 14f,   false),
             new ClipDef(WaranaAnimation.State.Fall,   "jumping",      4, 2, 8f,    true),
             new ClipDef(WaranaAnimation.State.Attack, "attack_true",  0, 0, 12.5f, false), // 5 frames = 0.4s, igual ao PlayerAttack
+            // A canalização não tem começo nem fim: ela dura o quanto o botão durar.
+            // Por isso a pose de concentração é um loop lento, e não um golpe.
+            new ClipDef(WaranaAnimation.State.Channel, "ataque_trovão", 0, 0, 10f, true),
             new ClipDef(WaranaAnimation.State.Death,  "dying",        0, 0, 10f,   false),
         };
 
@@ -75,7 +81,7 @@ namespace Warana.EditorTools
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Debug.Log($"[Waraná] {built.Count} clips e o Animator gerados em Assets/Animations/Warana.");
+            Debug.Log($"[Waraná] {built.Count} clips e o Animator gerados em {ClipFolder}.");
             return controller;
         }
 
@@ -241,6 +247,7 @@ namespace Warana.EditorTools
             controller.AddParameter(WaranaAnimation.Param.Walk, AnimatorControllerParameterType.Bool);
             controller.AddParameter(WaranaAnimation.Param.Dead, AnimatorControllerParameterType.Bool);
             controller.AddParameter(WaranaAnimation.Param.Attack, AnimatorControllerParameterType.Trigger);
+            controller.AddParameter(WaranaAnimation.Param.Channeling, AnimatorControllerParameterType.Bool);
 
             AnimatorStateMachine machine = controller.layers[0].stateMachine;
 
@@ -250,6 +257,7 @@ namespace Warana.EditorTools
             AnimatorState jump = AddState(machine, clips, WaranaAnimation.State.Jump, new Vector3(640f, 0f));
             AnimatorState fall = AddState(machine, clips, WaranaAnimation.State.Fall, new Vector3(640f, 90f));
             AnimatorState attack = AddState(machine, clips, WaranaAnimation.State.Attack, new Vector3(320f, 300f));
+            AnimatorState channel = AddState(machine, clips, WaranaAnimation.State.Channel, new Vector3(0f, 300f));
             AnimatorState death = AddState(machine, clips, WaranaAnimation.State.Death, new Vector3(320f, 390f));
 
             machine.defaultState = idle;
@@ -314,7 +322,8 @@ namespace Warana.EditorTools
             toAttack.canTransitionToSelf = false;
             toAttack
                 .WithTrigger(WaranaAnimation.Param.Attack)
-                .WithBool(WaranaAnimation.Param.Dead, false);
+                .WithBool(WaranaAnimation.Param.Dead, false)
+                .WithBool(WaranaAnimation.Param.Channeling, false);
 
             // Sai no fim do clip para Idle; de lá o grafo reencaminha sozinho.
             AnimatorStateTransition attackExit = attack.AddTransition(idle);
@@ -322,6 +331,18 @@ namespace Warana.EditorTools
             attackExit.exitTime = 1f;
             attackExit.hasFixedDuration = true;
             attackExit.duration = 0f;
+
+            // Canalização é um estado sustentado, não um evento: entra e sai por bool.
+            // Um trigger aqui deixaria a pose presa se o botão fosse solto no mesmo
+            // frame em que a transição foi avaliada.
+            AnimatorStateTransition toChannel = machine.AddAnyStateTransition(channel);
+            Configure(toChannel);
+            toChannel.canTransitionToSelf = false;
+            toChannel
+                .WithBool(WaranaAnimation.Param.Channeling, true)
+                .WithBool(WaranaAnimation.Param.Dead, false);
+
+            Connect(channel, idle).WithBool(WaranaAnimation.Param.Channeling, false);
 
             AnimatorStateTransition toDeath = machine.AddAnyStateTransition(death);
             Configure(toDeath);

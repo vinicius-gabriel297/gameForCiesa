@@ -43,7 +43,7 @@ namespace Warana.EditorTools
 
             var root = new GameObject(RootName);
 
-            GameObject player = BuildPlayer(root.transform, square, noFriction, groundLayer, animatorController);
+            GameObject player = BuildPlayer(root.transform, noFriction, groundLayer, animatorController);
             BuildLevel(root.transform, square, groundLayer);
             SetupCamera(player.transform);
 
@@ -56,9 +56,12 @@ namespace Warana.EditorTools
 
         // ---------------------------------------------------------------- player
 
-        private static GameObject BuildPlayer(
+        /// <summary>
+        /// Player completo: corpo, sensor, input, controller e visual animado. Reaproveitado
+        /// pelo <see cref="TilemapTestBuilder"/> — o Player é o mesmo nas duas sandboxes.
+        /// </summary>
+        internal static GameObject BuildPlayer(
             Transform parent,
-            Sprite square,
             PhysicsMaterial2D material,
             int groundLayer,
             AnimatorController animatorController)
@@ -163,7 +166,7 @@ namespace Warana.EditorTools
 
         // ---------------------------------------------------------------- camera
 
-        private static void SetupCamera(Transform target)
+        internal static void SetupCamera(Transform target)
         {
             Camera camera = Camera.main;
             if (camera == null)
@@ -193,7 +196,7 @@ namespace Warana.EditorTools
         // ----------------------------------------------------------------- assets
 
         /// <summary>Garante que a layer existe e devolve o índice dela.</summary>
-        private static int EnsureLayer(string name)
+        internal static int EnsureLayer(string name)
         {
             int existing = LayerMask.NameToLayer(name);
             if (existing >= 0) return existing;
@@ -250,7 +253,7 @@ namespace Warana.EditorTools
         }
 
         /// <summary>Fricção zero: sem isso o personagem gruda em paredes ao encostar no ar.</summary>
-        private static PhysicsMaterial2D EnsureNoFrictionMaterial()
+        internal static PhysicsMaterial2D EnsureNoFrictionMaterial()
         {
             var existing = AssetDatabase.LoadAssetAtPath<PhysicsMaterial2D>(MaterialPath);
             if (existing != null) return existing;

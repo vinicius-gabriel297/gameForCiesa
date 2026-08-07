@@ -21,6 +21,10 @@ namespace Warana.Player
             public const string Walk = "Walk";
 
             public const string Attack = "Attack";
+
+            /// <summary>True enquanto o RMB segura o Modo de Canalização.</summary>
+            public const string Channeling = "Channeling";
+
             public const string Dead = "Dead";
         }
 
@@ -32,6 +36,10 @@ namespace Warana.Player
             public const string Jump = "Jump";
             public const string Fall = "Fall";
             public const string Attack = "Attack";
+
+            /// <summary>Pose de concentração, em loop enquanto a canalização durar.</summary>
+            public const string Channel = "Channel";
+
             public const string Death = "Death";
         }
 

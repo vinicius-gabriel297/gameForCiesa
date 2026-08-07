@@ -38,6 +38,24 @@ namespace Warana.Companion
         [Tooltip("Velocidade da varredura da órbita, em ciclos por segundo.")]
         [SerializeField] private float orbitFrequency = 0.35f;
 
+        [Header("Canalização")]
+        [Tooltip("Durante o Modo de Canalização o orbe assume a posição de combate.")]
+        [SerializeField] private bool reactToChanneling = true;
+
+        [Tooltip("Ângulo em torno do jogador ao canalizar. 90° = exatamente acima da cabeça.")]
+        [Range(-180f, 180f)]
+        [SerializeField] private float channelAngle = 90f;
+
+        [Tooltip("Distância ao canalizar. Um pouco maior: o orbe se destaca do corpo.")]
+        [SerializeField] private float channelDistance = 1.45f;
+
+        [Tooltip("Quanto da varredura e do respiro sobra ao canalizar. 0 = imóvel.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float channelIdleMotion = 0.25f;
+
+        [Tooltip("Velocidade da transição entre pose de exploração e de combate.")]
+        [SerializeField] private float channelBlendSpeed = 7f;
+
         [Header("Respiro (idle)")]
         [Tooltip("Quanto a distância pulsa para dentro e para fora, em unidades.")]
         [SerializeField] private float breathAmplitude = 0.08f;
@@ -66,12 +84,23 @@ namespace Warana.Companion
         [Range(0f, 1f)]
         [SerializeField] private float doubleBlinkChance = 0.2f;
 
+        [Header("Ataque")]
+        [Tooltip("Quadros da carga, do olho NEUTRO ao BRILHANDO. O último é o instante do disparo.")]
+        [SerializeField] private Sprite[] attackFrames;
+
+        [Tooltip("Quanto o quadro brilhante ainda fica na tela depois do disparo, em segundos.")]
+        [SerializeField] private float attackGlowHold = 0.09f;
+
         [Header("Ordenação")]
         [SerializeField] private string sortingLayer = "Default";
         [SerializeField] private int sortingOrder = 10;
 
         private PlayerController2D _targetPlayer;
+        private PlayerChannel _targetChannel;
         private SpriteRenderer _renderer;
+
+        /// <summary>0 = pose de exploração, 1 = pose de combate. Interpolado, nunca instantâneo.</summary>
+        private float _channelBlend;
 
         /// <summary>Velocidade acumulada pelo SmoothDamp — não é física, só estado do amortecimento.</summary>
         private Vector3 _velocity;
@@ -82,6 +111,9 @@ namespace Warana.Companion
         private float _blinkCountdown;
         private float _blinkElapsed = -1f; // < 0 = olho aberto, parado
         private int _blinksLeft;
+
+        private float _attackElapsed = -1f; // < 0 = sem carga em andamento
+        private float _attackCharge;
 
         /// <summary>True quando o jogador encara a esquerda e o espelhamento está ligado.</summary>
         private bool Mirrored =>
@@ -104,6 +136,8 @@ namespace Warana.Companion
             {
                 _targetPlayer = target.GetComponent<PlayerController2D>();
             }
+
+            _targetChannel = target != null ? target.GetComponent<PlayerChannel>() : null;
         }
 
         private void OnEnable()
@@ -118,9 +152,12 @@ namespace Warana.Companion
 
         private void LateUpdate()
         {
-            if (Application.isPlaying) TickBlink(Time.deltaTime);
+            // A carga atropela a piscada: no meio de um disparo o olho não pisca.
+            if (Application.isPlaying && !TickAttack(Time.deltaTime)) TickBlink(Time.deltaTime);
 
             if (target == null) return;
+
+            TickChannelBlend(Time.deltaTime);
 
             // A pupila é lateral: sem virar o sprite o olho ficaria olhando para trás.
             if (_renderer != null) _renderer.flipX = Mirrored;
@@ -149,14 +186,19 @@ namespace Warana.Companion
         /// </summary>
         private Vector3 DesiredPosition(float time)
         {
-            float angle = restAngle + Mathf.Sin(time * orbitFrequency * Mathf.PI * 2f) * orbitArc;
+            // A pose de combate é a mesma órbita com outros parâmetros, não um caminho
+            // separado: interpolar entre as duas evita qualquer salto ao alternar de modo.
+            float baseAngle = Mathf.LerpAngle(restAngle, channelAngle, _channelBlend);
+            float motion = Mathf.Lerp(1f, channelIdleMotion, _channelBlend);
+
+            float angle = baseAngle + Mathf.Sin(time * orbitFrequency * Mathf.PI * 2f) * orbitArc * motion;
 
             // Espelhar em torno da vertical mantém o orbe "atrás do ombro" nos dois sentidos.
             if (Mirrored) angle = 180f - angle;
 
             // Golden ratio na frequência: o respiro nunca cai em fase com a órbita.
-            float breath = Mathf.Sin(time * breathFrequency * 1.618f * Mathf.PI * 2f) * breathAmplitude;
-            float distance = followDistance + breath;
+            float breath = Mathf.Sin(time * breathFrequency * 1.618f * Mathf.PI * 2f) * breathAmplitude * motion;
+            float distance = Mathf.Lerp(followDistance, channelDistance, _channelBlend) + breath;
 
             float radians = angle * Mathf.Deg2Rad;
             Vector3 offset = new Vector3(Mathf.Cos(radians), Mathf.Sin(radians), 0f) * distance;
@@ -164,6 +206,17 @@ namespace Warana.Companion
             Vector3 anchor = target.position + offset;
             anchor.z = transform.position.z; // o orbe fica no próprio plano, não no do alvo
             return anchor;
+        }
+
+        /// <summary>Aproxima o blend do alvo (0 ou 1) a uma taxa fixa, independente de framerate.</summary>
+        private void TickChannelBlend(float deltaTime)
+        {
+            bool channeling = reactToChanneling && _targetChannel != null && _targetChannel.IsChanneling;
+            float goal = channeling ? 1f : 0f;
+
+            _channelBlend = channelBlendSpeed <= 0f
+                ? goal
+                : Mathf.MoveTowards(_channelBlend, goal, channelBlendSpeed * deltaTime);
         }
 
         // ----------------------------------------------------------------- piscada
@@ -216,17 +269,56 @@ namespace Warana.Companion
             ShowFrame(Mathf.RoundToInt(closed * (frames.Length - 1)));
         }
 
+        // ------------------------------------------------------------------ ataque
+
+        /// <summary>
+        /// Percorre os quadros da carga. A escala é feita para o ÚLTIMO quadro — o
+        /// olho brilhando — cair exatamente no fim da carga, que é o frame em que o
+        /// raio sai. Depois disso o brilho ainda segura um instante, senão ele seria
+        /// atropelado pelo próprio VFX e o jogador nunca chegaria a vê-lo.
+        /// </summary>
+        /// <returns>True enquanto a carga estiver no comando do sprite.</returns>
+        private bool TickAttack(float deltaTime)
+        {
+            if (_attackElapsed < 0f) return false;
+
+            if (attackFrames == null || attackFrames.Length == 0)
+            {
+                _attackElapsed = -1f;
+                return false;
+            }
+
+            _attackElapsed += deltaTime;
+
+            if (_attackElapsed >= _attackCharge + attackGlowHold)
+            {
+                _attackElapsed = -1f;
+                ShowFrame(0);
+
+                // A piscada estava congelada durante a carga; sem reagendar, a próxima
+                // dispararia no instante seguinte ao disparo.
+                ScheduleNextBlink();
+                return false;
+            }
+
+            float t = _attackCharge > 0f ? Mathf.Clamp01(_attackElapsed / _attackCharge) : 1f;
+            ShowSprite(attackFrames, Mathf.RoundToInt(t * (attackFrames.Length - 1)));
+            return true;
+        }
+
         private void ScheduleNextBlink()
         {
             _blinkCountdown = Random.Range(blinkInterval.x, blinkInterval.y);
             _blinksLeft = Random.value < doubleBlinkChance ? 1 : 0;
         }
 
-        private void ShowFrame(int index)
-        {
-            if (_renderer == null || frames == null || frames.Length == 0) return;
+        private void ShowFrame(int index) => ShowSprite(frames, index);
 
-            _renderer.sprite = frames[Mathf.Clamp(index, 0, frames.Length - 1)];
+        private void ShowSprite(Sprite[] set, int index)
+        {
+            if (_renderer == null || set == null || set.Length == 0) return;
+
+            _renderer.sprite = set[Mathf.Clamp(index, 0, set.Length - 1)];
         }
 
         // ------------------------------------------------------------------ visual
@@ -251,6 +343,7 @@ namespace Warana.Companion
         {
             target = newTarget;
             _targetPlayer = newTarget != null ? newTarget.GetComponent<PlayerController2D>() : null;
+            _targetChannel = newTarget != null ? newTarget.GetComponent<PlayerChannel>() : null;
         }
 
         /// <summary>Cola o orbe na posição de repouso, sem transição — útil ao teleportar o jogador.</summary>
@@ -260,6 +353,32 @@ namespace Warana.Companion
 
             transform.position = DesiredPosition(Time.time + _phase);
             _velocity = Vector3.zero;
+        }
+
+        /// <summary>
+        /// Toca a carga do ataque. Quem chama é o <c>SpiritBoltEmitter</c>, que sabe
+        /// quanto falta para o tiro: passando esse tempo como <paramref name="chargeDuration"/>,
+        /// o quadro do brilho e o disparo acontecem no mesmo frame.
+        /// </summary>
+        public void PlayAttack(float chargeDuration)
+        {
+            if (attackFrames == null || attackFrames.Length == 0) return;
+
+            _attackCharge = Mathf.Max(0f, chargeDuration);
+            _attackElapsed = 0f;
+
+            // Cancela qualquer piscada em curso: a carga é dona do sprite a partir daqui.
+            _blinkElapsed = -1f;
+        }
+
+        /// <summary>Corta a carga e devolve o olho ao repouso — soltar o RMB no meio, por exemplo.</summary>
+        public void StopAttack()
+        {
+            if (_attackElapsed < 0f) return;
+
+            _attackElapsed = -1f;
+            ShowFrame(0);
+            ScheduleNextBlink();
         }
 
         /// <summary>Força uma piscada agora — gancho para reagir a dano, susto ou diálogo.</summary>
