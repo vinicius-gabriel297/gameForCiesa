@@ -1,0 +1,217 @@
+{
+  "group_id": "840a394f-66dc-450f-8d58-0a1ebe89ca64",
+  "states": [
+    {
+      "character": {
+        "id": "2d79c0fa-7df9-43be-8d0c-d9a14b3f2ed4",
+        "name": "Idle",
+        "prompt": "Create a 32x32 pixel art side-view playable character for a 2D platformer.\n\nA young Amazonian tribal warrior named Waran\u00e1, inspired by the Brazilian legend of Guaran\u00e1.\n\nStrong and recognizable silhouette:\n- Messy medium-length black hair.\n- Brown skin.\n- Red tribal face paint across the eyes.\n- Simple red waist cloth.\n- Bare chest and bare feet.\n- Wooden spear with a stone spearhead.\n- Athletic but slim body.\n- Large expressive silhouette with oversized hair for readability.\n\nStyle:\n- Clean pixel art.\n- Limited color palette.\n- High readability at 32x32 pixels.\n- Minimal details.\n- Suitable for sprite animation.\n- Consistent proportions.\n- Side view only.\n- No background.\n- No text.\n- No lighting effects.\n- No magical effects.\n- No lightning.\n- No floating orb.\n- No glow.\n- Transparent background.\n\nInspired by the readability and simplicity of Children of Morta, Moonlighter and classic indie pixel art.",
+        "size": {
+          "width": 120,
+          "height": 120
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "side",
+        "created_at": "2026-08-07T04:06:13.220629+00:00"
+      },
+      "folder": "Idle",
+      "frames": {
+        "rotations": {
+          "south": "Idle/rotations/south.png",
+          "south-east": "Idle/rotations/south-east.png",
+          "east": "Idle/rotations/east.png",
+          "north-east": "Idle/rotations/north-east.png",
+          "north": "Idle/rotations/north.png",
+          "north-west": "Idle/rotations/north-west.png",
+          "west": "Idle/rotations/west.png",
+          "south-west": "Idle/rotations/south-west.png"
+        },
+        "animations": {
+          "Idle": {
+            "south": [
+              "Idle/animations/Idle/south/frame_000.png",
+              "Idle/animations/Idle/south/frame_001.png",
+              "Idle/animations/Idle/south/frame_002.png",
+              "Idle/animations/Idle/south/frame_003.png",
+              "Idle/animations/Idle/south/frame_004.png",
+              "Idle/animations/Idle/south/frame_005.png",
+              "Idle/animations/Idle/south/frame_006.png",
+              "Idle/animations/Idle/south/frame_007.png"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "character": {
+        "id": "e2bbd7bf-3873-4708-b193-967af2668187",
+        "name": "Running",
+        "prompt": "Create a 32x32 pixel art side-view playable character for a 2D platformer.\n\nA young Amazonian tribal warrior named Waran\u00e1, inspired by the Brazilian legend of Guaran\u00e1.\n\nStrong and recognizable silhouette:\n- Messy medium-length black hair.\n- Brown skin.\n- Red tribal face paint across the eyes.\n- Simple red waist cloth.\n- Bare chest and bare feet.\n- Wooden spear with a stone spearhead.\n- Athletic but slim body.\n- Large expressive silhouette with oversized hair for readability.\n\nStyle:\n- Clean pixel art.\n- Limited color palette.\n- High readability at 32x32 pixels.\n- Minimal details.\n- Suitable for sprite animation.\n- Consistent proportions.\n- Side view only.\n- No background.\n- No text.\n- No lighting effects.\n- No magical effects.\n- No lightning.\n- No floating orb.\n- No glow.\n- Transparent background.\n\nInspired by the readability and simplicity of Children of Morta, Moonlighter and classic indie pixel art.",
+        "size": {
+          "width": 120,
+          "height": 120
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "side",
+        "created_at": "2026-08-07T04:11:10.628797+00:00"
+      },
+      "folder": "Running",
+      "frames": {
+        "rotations": {
+          "south": "Running/rotations/south.png",
+          "south-east": "Running/rotations/south-east.png",
+          "east": "Running/rotations/east.png",
+          "north-east": "Running/rotations/north-east.png",
+          "north": "Running/rotations/north.png",
+          "north-west": "Running/rotations/north-west.png",
+          "west": "Running/rotations/west.png",
+          "south-west": "Running/rotations/south-west.png"
+        },
+        "animations": {
+          "Running": {
+            "south-west": [
+              "Running/animations/Running/south-west/frame_000.png",
+              "Running/animations/Running/south-west/frame_001.png",
+              "Running/animations/Running/south-west/frame_002.png",
+              "Running/animations/Running/south-west/frame_003.png",
+              "Running/animations/Running/south-west/frame_004.png",
+              "Running/animations/Running/south-west/frame_005.png",
+              "Running/animations/Running/south-west/frame_006.png",
+              "Running/animations/Running/south-west/frame_007.png"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "character": {
+        "id": "e2a08392-fdbe-49c9-b596-ae2873ebd21d",
+        "name": "'jumping'",
+        "prompt": "Create a 32x32 pixel art side-view playable character for a 2D platformer.\n\nA young Amazonian tribal warrior named Waran\u00e1, inspired by the Brazilian legend of Guaran\u00e1.\n\nStrong and recognizable silhouette:\n- Messy medium-length black hair.\n- Brown skin.\n- Red tribal face paint across the eyes.\n- Simple red waist cloth.\n- Bare chest and bare feet.\n- Wooden spear with a stone spearhead.\n- Athletic but slim body.\n- Large expressive silhouette with oversized hair for readability.\n\nStyle:\n- Clean pixel art.\n- Limited color palette.\n- High readability at 32x32 pixels.\n- Minimal details.\n- Suitable for sprite animation.\n- Consistent proportions.\n- Side view only.\n- No background.\n- No text.\n- No lighting effects.\n- No magical effects.\n- No lightning.\n- No floating orb.\n- No glow.\n- Transparent background.\n\nInspired by the readability and simplicity of Children of Morta, Moonlighter and classic indie pixel art.",
+        "size": {
+          "width": 120,
+          "height": 120
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "side",
+        "created_at": "2026-08-07T04:26:52.814183+00:00"
+      },
+      "folder": "jumping",
+      "frames": {
+        "rotations": {
+          "south": "jumping/rotations/south.png",
+          "south-east": "jumping/rotations/south-east.png",
+          "east": "jumping/rotations/east.png",
+          "north-east": "jumping/rotations/north-east.png",
+          "north": "jumping/rotations/north.png",
+          "north-west": "jumping/rotations/north-west.png",
+          "west": "jumping/rotations/west.png",
+          "south-west": "jumping/rotations/south-west.png"
+        },
+        "animations": {
+          "A_fast_and_responsive_platformer_jump._The_tribal": {
+            "south-east": [
+              "jumping/animations/A_fast_and_responsive_platformer_jump._The_tribal/south-east/frame_000.png",
+              "jumping/animations/A_fast_and_responsive_platformer_jump._The_tribal/south-east/frame_001.png",
+              "jumping/animations/A_fast_and_responsive_platformer_jump._The_tribal/south-east/frame_002.png",
+              "jumping/animations/A_fast_and_responsive_platformer_jump._The_tribal/south-east/frame_003.png",
+              "jumping/animations/A_fast_and_responsive_platformer_jump._The_tribal/south-east/frame_004.png",
+              "jumping/animations/A_fast_and_responsive_platformer_jump._The_tribal/south-east/frame_005.png",
+              "jumping/animations/A_fast_and_responsive_platformer_jump._The_tribal/south-east/frame_006.png",
+              "jumping/animations/A_fast_and_responsive_platformer_jump._The_tribal/south-east/frame_007.png"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "character": {
+        "id": "2fe48663-b5a5-44b0-8c54-184ec01c752a",
+        "name": "dying",
+        "prompt": "Create a 32x32 pixel art side-view playable character for a 2D platformer.\n\nA young Amazonian tribal warrior named Waran\u00e1, inspired by the Brazilian legend of Guaran\u00e1.\n\nStrong and recognizable silhouette:\n- Messy medium-length black hair.\n- Brown skin.\n- Red tribal face paint across the eyes.\n- Simple red waist cloth.\n- Bare chest and bare feet.\n- Wooden spear with a stone spearhead.\n- Athletic but slim body.\n- Large expressive silhouette with oversized hair for readability.\n\nStyle:\n- Clean pixel art.\n- Limited color palette.\n- High readability at 32x32 pixels.\n- Minimal details.\n- Suitable for sprite animation.\n- Consistent proportions.\n- Side view only.\n- No background.\n- No text.\n- No lighting effects.\n- No magical effects.\n- No lightning.\n- No floating orb.\n- No glow.\n- Transparent background.\n\nInspired by the readability and simplicity of Children of Morta, Moonlighter and classic indie pixel art.",
+        "size": {
+          "width": 120,
+          "height": 120
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "side",
+        "created_at": "2026-08-07T04:31:40.238814+00:00"
+      },
+      "folder": "dying",
+      "frames": {
+        "rotations": {
+          "south": "dying/rotations/south.png",
+          "south-east": "dying/rotations/south-east.png",
+          "east": "dying/rotations/east.png",
+          "north-east": "dying/rotations/north-east.png",
+          "north": "dying/rotations/north.png",
+          "north-west": "dying/rotations/north-west.png",
+          "west": "dying/rotations/west.png",
+          "south-west": "dying/rotations/south-west.png"
+        },
+        "animations": {
+          "The_tribal_warrior_is_fatally_wounded._He_plants_h": {
+            "south-east": [
+              "dying/animations/The_tribal_warrior_is_fatally_wounded._He_plants_h/south-east/frame_000.png",
+              "dying/animations/The_tribal_warrior_is_fatally_wounded._He_plants_h/south-east/frame_001.png",
+              "dying/animations/The_tribal_warrior_is_fatally_wounded._He_plants_h/south-east/frame_002.png",
+              "dying/animations/The_tribal_warrior_is_fatally_wounded._He_plants_h/south-east/frame_003.png",
+              "dying/animations/The_tribal_warrior_is_fatally_wounded._He_plants_h/south-east/frame_004.png",
+              "dying/animations/The_tribal_warrior_is_fatally_wounded._He_plants_h/south-east/frame_005.png",
+              "dying/animations/The_tribal_warrior_is_fatally_wounded._He_plants_h/south-east/frame_006.png",
+              "dying/animations/The_tribal_warrior_is_fatally_wounded._He_plants_h/south-east/frame_007.png"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "character": {
+        "id": "0e983dff-8db1-49c8-b025-9ffa78353f47",
+        "name": "The tribal warrior i",
+        "prompt": "Create a 32x32 pixel art side-view playable character for a 2D platformer.\n\nA young Amazonian tribal warrior named Waran\u00e1, inspired by the Brazilian legend of Guaran\u00e1.\n\nStrong and recognizable silhouette:\n- Messy medium-length black hair.\n- Brown skin.\n- Red tribal face paint across the eyes.\n- Simple red waist cloth.\n- Bare chest and bare feet.\n- Wooden spear with a stone spearhead.\n- Athletic but slim body.\n- Large expressive silhouette with oversized hair for readability.\n\nStyle:\n- Clean pixel art.\n- Limited color palette.\n- High readability at 32x32 pixels.\n- Minimal details.\n- Suitable for sprite animation.\n- Consistent proportions.\n- Side view only.\n- No background.\n- No text.\n- No lighting effects.\n- No magical effects.\n- No lightning.\n- No floating orb.\n- No glow.\n- Transparent background.\n\nInspired by the readability and simplicity of Children of Morta, Moonlighter and classic indie pixel art.",
+        "size": {
+          "width": 120,
+          "height": 120
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "side",
+        "created_at": "2026-08-07T04:42:21.856744+00:00"
+      },
+      "folder": "The_tribal_warrior_i",
+      "frames": {
+        "rotations": {
+          "south": "The_tribal_warrior_i/rotations/south.png",
+          "south-east": "The_tribal_warrior_i/rotations/south-east.png",
+          "east": "The_tribal_warrior_i/rotations/east.png",
+          "north-east": "The_tribal_warrior_i/rotations/north-east.png",
+          "north": "The_tribal_warrior_i/rotations/north.png",
+          "north-west": "The_tribal_warrior_i/rotations/north-west.png",
+          "west": "The_tribal_warrior_i/rotations/west.png",
+          "south-west": "The_tribal_warrior_i/rotations/south-west.png"
+        },
+        "animations": {
+          "The_tribal_warrior_performs_a_fast_forward_spear_t": {
+            "south": [
+              "The_tribal_warrior_i/animations/The_tribal_warrior_performs_a_fast_forward_spear_t/south/frame_000.png",
+              "The_tribal_warrior_i/animations/The_tribal_warrior_performs_a_fast_forward_spear_t/south/frame_001.png",
+              "The_tribal_warrior_i/animations/The_tribal_warrior_performs_a_fast_forward_spear_t/south/frame_002.png",
+              "The_tribal_warrior_i/animations/The_tribal_warrior_performs_a_fast_forward_spear_t/south/frame_003.png",
+              "The_tribal_warrior_i/animations/The_tribal_warrior_performs_a_fast_forward_spear_t/south/frame_004.png",
+              "The_tribal_warrior_i/animations/The_tribal_warrior_performs_a_fast_forward_spear_t/south/frame_005.png",
+              "The_tribal_warrior_i/animations/The_tribal_warrior_performs_a_fast_forward_spear_t/south/frame_006.png",
+              "The_tribal_warrior_i/animations/The_tribal_warrior_performs_a_fast_forward_spear_t/south/frame_007.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-08-07T05:19:11.221234"
+}

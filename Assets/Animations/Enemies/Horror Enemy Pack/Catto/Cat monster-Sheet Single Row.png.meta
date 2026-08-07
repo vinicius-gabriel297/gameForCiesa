@@ -1,0 +1,967 @@
+fileFormatVersion: 2
+guid: 327ab31b19848a541b1fed2138a1baf1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 174872778134777224
+    second: Cat monster-Sheet Single Row_0
+  - first:
+      213: -7767846555760314327
+    second: Cat monster-Sheet Single Row_1
+  - first:
+      213: 4024759938841916021
+    second: Cat monster-Sheet Single Row_2
+  - first:
+      213: 5693839527249839455
+    second: Cat monster-Sheet Single Row_3
+  - first:
+      213: 4161001018123911357
+    second: Cat monster-Sheet Single Row_4
+  - first:
+      213: 4318481362174269202
+    second: Cat monster-Sheet Single Row_5
+  - first:
+      213: -6388635736960022655
+    second: Cat monster-Sheet Single Row_6
+  - first:
+      213: 4665035683369281906
+    second: Cat monster-Sheet Single Row_7
+  - first:
+      213: -1416190136973475284
+    second: Cat monster-Sheet Single Row_8
+  - first:
+      213: -687580732304901557
+    second: Cat monster-Sheet Single Row_9
+  - first:
+      213: 3610851053790365937
+    second: Cat monster-Sheet Single Row_10
+  - first:
+      213: 3023536065680296842
+    second: Cat monster-Sheet Single Row_11
+  - first:
+      213: -7179139550756882091
+    second: Cat monster-Sheet Single Row_12
+  - first:
+      213: 9197612441068771899
+    second: Cat monster-Sheet Single Row_13
+  - first:
+      213: 8817316034585032065
+    second: Cat monster-Sheet Single Row_14
+  - first:
+      213: 6287471747148744166
+    second: Cat monster-Sheet Single Row_15
+  - first:
+      213: -6252095872503801105
+    second: Cat monster-Sheet Single Row_16
+  - first:
+      213: 6514943346374530387
+    second: Cat monster-Sheet Single Row_17
+  - first:
+      213: -1499617155855784375
+    second: Cat monster-Sheet Single Row_18
+  - first:
+      213: 3322263894701088943
+    second: Cat monster-Sheet Single Row_19
+  - first:
+      213: -7262458338586877894
+    second: Cat monster-Sheet Single Row_20
+  - first:
+      213: 9006388421625169500
+    second: Cat monster-Sheet Single Row_21
+  - first:
+      213: -6773439773655168989
+    second: Cat monster-Sheet Single Row_22
+  - first:
+      213: 8274507071815287903
+    second: Cat monster-Sheet Single Row_23
+  - first:
+      213: 3332986988557857257
+    second: Cat monster-Sheet Single Row_24
+  - first:
+      213: -63436938368651179
+    second: Cat monster-Sheet Single Row_25
+  - first:
+      213: 882736483058875963
+    second: Cat monster-Sheet Single Row_26
+  - first:
+      213: 4682100697422265188
+    second: Cat monster-Sheet Single Row_27
+  - first:
+      213: -7547722895108378528
+    second: Cat monster-Sheet Single Row_28
+  - first:
+      213: -6633447378748091407
+    second: Cat monster-Sheet Single Row_29
+  - first:
+      213: 3396091429647186660
+    second: Cat monster-Sheet Single Row_30
+  - first:
+      213: -7120711358085254241
+    second: Cat monster-Sheet Single Row_31
+  - first:
+      213: -8511459485922739889
+    second: Cat monster-Sheet Single Row_32
+  - first:
+      213: 7407621213386359169
+    second: Cat monster-Sheet Single Row_33
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 0
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_0
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 0
+        width: 18
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88deb9d7dd54d6200800000000000000
+      internalID: 174872778134777224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_1
+      rect:
+        serializedVersion: 2
+        x: 254
+        y: 0
+        width: 18
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9283a2e96b0133490800000000000000
+      internalID: -7767846555760314327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_2
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 0
+        width: 19
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57235ec17d1dad730800000000000000
+      internalID: 4024759938841916021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_3
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 0
+        width: 14
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f550ecdf1e4940f40800000000000000
+      internalID: 5693839527249839455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_4
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 0
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db0805b4168deb930800000000000000
+      internalID: 4161001018123911357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_5
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 0
+        width: 16
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 217da892be35eeb30800000000000000
+      internalID: 4318481362174269202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_6
+      rect:
+        serializedVersion: 2
+        x: 919
+        y: 0
+        width: 32
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 187c12b45a10757a0800000000000000
+      internalID: -6388635736960022655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_7
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 0
+        width: 36
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2796fb3dc398db040800000000000000
+      internalID: 4665035683369281906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_8
+      rect:
+        serializedVersion: 2
+        x: 1012
+        y: 0
+        width: 41
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c22c84fd29ea85ce0800000000000000
+      internalID: -1416190136973475284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_9
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 2
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4a309887f83576f0800000000000000
+      internalID: -687580732304901557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_10
+      rect:
+        serializedVersion: 2
+        x: 1215
+        y: 2
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f8050ef6e15c1230800000000000000
+      internalID: 3610851053790365937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_11
+      rect:
+        serializedVersion: 2
+        x: 1263
+        y: 2
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8bc4784802c5f920800000000000000
+      internalID: 3023536065680296842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_12
+      rect:
+        serializedVersion: 2
+        x: 1311
+        y: 2
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 559bd248d929e5c90800000000000000
+      internalID: -7179139550756882091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_13
+      rect:
+        serializedVersion: 2
+        x: 1355
+        y: 0
+        width: 21
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3a1e9bb8cb74af70800000000000000
+      internalID: 9197612441068771899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_14
+      rect:
+        serializedVersion: 2
+        x: 1407
+        y: 2
+        width: 21
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 185fbc1a7366d5a70800000000000000
+      internalID: 8817316034585032065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_15
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 6
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e50b18dd36914750800000000000000
+      internalID: 6287471747148744166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_16
+      rect:
+        serializedVersion: 2
+        x: 1503
+        y: 7
+        width: 16
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fea99b1dde71c39a0800000000000000
+      internalID: -6252095872503801105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_17
+      rect:
+        serializedVersion: 2
+        x: 1552
+        y: 8
+        width: 12
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 355d274b47ab96a50800000000000000
+      internalID: 6514943346374530387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_18
+      rect:
+        serializedVersion: 2
+        x: 1604
+        y: 22
+        width: 54
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 946622e542a403be0800000000000000
+      internalID: -1499617155855784375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_19
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 0
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa0a3cdf86d0b1e20800000000000000
+      internalID: 3322263894701088943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_20
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 0
+        width: 18
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a30a4748e90963b90800000000000000
+      internalID: -7262458338586877894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_21
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 0
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c56c8243d8e1dfc70800000000000000
+      internalID: 9006388421625169500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_22
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 0
+        width: 18
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32808cfb968eff1a0800000000000000
+      internalID: -6773439773655168989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_23
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 0
+        width: 17
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5402037754f4d270800000000000000
+      internalID: 8274507071815287903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_24
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 0
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e17df5d106214e20800000000000000
+      internalID: 3332986988557857257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_25
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 0
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 550f5eec070ae1ff0800000000000000
+      internalID: -63436938368651179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_26
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 0
+        width: 18
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3e7007872c104c00800000000000000
+      internalID: 882736483058875963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_27
+      rect:
+        serializedVersion: 2
+        x: 685
+        y: 0
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46b767807c92af040800000000000000
+      internalID: 4682100697422265188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_28
+      rect:
+        serializedVersion: 2
+        x: 734
+        y: 0
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0607bf5340a114790800000000000000
+      internalID: -7547722895108378528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_29
+      rect:
+        serializedVersion: 2
+        x: 783
+        y: 0
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f3597921c241f3a0800000000000000
+      internalID: -6633447378748091407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_30
+      rect:
+        serializedVersion: 2
+        x: 831
+        y: 0
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ea7ed87927512f20800000000000000
+      internalID: 3396091429647186660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_31
+      rect:
+        serializedVersion: 2
+        x: 879
+        y: 0
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f933d393fb62e2d90800000000000000
+      internalID: -7120711358085254241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_32
+      rect:
+        serializedVersion: 2
+        x: 1063
+        y: 0
+        width: 31
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f49327571b831e980800000000000000
+      internalID: -8511459485922739889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cat monster-Sheet Single Row_33
+      rect:
+        serializedVersion: 2
+        x: 1117
+        y: 0
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 181ca8e0f382dc660800000000000000
+      internalID: 7407621213386359169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
