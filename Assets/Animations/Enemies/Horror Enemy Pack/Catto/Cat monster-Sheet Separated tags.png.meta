@@ -145,7 +145,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 0
   spriteMeshType: 0
   alignment: 0
@@ -959,7 +959,41 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Cat monster-Sheet Separated tags_0: 1797867407650390533
+      Cat monster-Sheet Separated tags_1: 2668888204601993872
+      Cat monster-Sheet Separated tags_10: -3066160291103187476
+      Cat monster-Sheet Separated tags_11: 7978853735006000971
+      Cat monster-Sheet Separated tags_12: 2906084105983325296
+      Cat monster-Sheet Separated tags_13: -5025332738655254710
+      Cat monster-Sheet Separated tags_14: 8240622411938695551
+      Cat monster-Sheet Separated tags_15: 4964226710219053397
+      Cat monster-Sheet Separated tags_16: -8919223032636409274
+      Cat monster-Sheet Separated tags_17: 162972796353407908
+      Cat monster-Sheet Separated tags_18: -4308691125128980845
+      Cat monster-Sheet Separated tags_19: 2648500105163927634
+      Cat monster-Sheet Separated tags_2: 9103688115093151527
+      Cat monster-Sheet Separated tags_20: -4581392402574812698
+      Cat monster-Sheet Separated tags_21: -8094119150768010384
+      Cat monster-Sheet Separated tags_22: 6393285297811001556
+      Cat monster-Sheet Separated tags_23: 482474934610594238
+      Cat monster-Sheet Separated tags_24: -4669132932938903313
+      Cat monster-Sheet Separated tags_25: -2153602911566510292
+      Cat monster-Sheet Separated tags_26: 1420490634079876153
+      Cat monster-Sheet Separated tags_27: -4944519928714303678
+      Cat monster-Sheet Separated tags_28: -1875643187348556455
+      Cat monster-Sheet Separated tags_29: 2424415102291148746
+      Cat monster-Sheet Separated tags_3: 3187046202065385598
+      Cat monster-Sheet Separated tags_30: -8257347247476543564
+      Cat monster-Sheet Separated tags_31: -5608125333185101182
+      Cat monster-Sheet Separated tags_32: 8630641152546286151
+      Cat monster-Sheet Separated tags_33: 5576932481978436096
+      Cat monster-Sheet Separated tags_4: -3688846284278660523
+      Cat monster-Sheet Separated tags_5: 4783975692715131057
+      Cat monster-Sheet Separated tags_6: 4557403314966528474
+      Cat monster-Sheet Separated tags_7: -3145865561031152084
+      Cat monster-Sheet Separated tags_8: 1016817568246653825
+      Cat monster-Sheet Separated tags_9: -1728874664560618309
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

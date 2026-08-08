@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Warana.Combat;
@@ -46,6 +47,10 @@ namespace Warana.Enemies
         [Header("Perseguição")]
         [SerializeField] private float chaseSpeed = 2.2f;
 
+        [Tooltip("Quanto tempo ele volta a patrulhar depois de bater numa parede ou beirada perseguindo. " +
+                 "Impede que fique encarando o obstáculo com o jogador do outro lado.")]
+        [SerializeField] private float giveUpDuration = 2f;
+
         [Header("Ataque")]
         [Tooltip("Distância horizontal em que ele decide sacar a arma.")]
         [SerializeField] private float attackRange = 0.85f;
@@ -86,11 +91,15 @@ namespace Warana.Enemies
         private float _timer;
         private float _cooldownLeft;
         private float _staggerLeft;
+        private float _giveUpLeft;
         private bool _struck;
         private float _spawnX;
 
         private readonly List<Collider2D> _hits = new List<Collider2D>();
         private ContactFilter2D _hitFilter;
+
+        /// <summary>Disparado no frame em que o golpe sai — o gancho de áudio escuta.</summary>
+        public event Action AttackStarted;
 
         private void Awake()
         {
@@ -112,6 +121,7 @@ namespace Warana.Enemies
             _timer = 0f;
             _cooldownLeft = 0f;
             _staggerLeft = 0f;
+            _giveUpLeft = 0f;
             _struck = false;
             _spawnX = transform.position.x;
 
@@ -135,6 +145,7 @@ namespace Warana.Enemies
 
             _cooldownLeft = Mathf.Max(0f, _cooldownLeft - dt);
             _staggerLeft = Mathf.Max(0f, _staggerLeft - dt);
+            _giveUpLeft = Mathf.Max(0f, _giveUpLeft - dt);
             _timer -= dt;
 
             switch (_state)
@@ -153,7 +164,11 @@ namespace Warana.Enemies
 
         private void TickPatrol()
         {
-            if (_senses.IsAware)
+            // Enquanto o "desisti" corre, ele ignora estar alerta e volta a rondar.
+            // Sem essa carência, sair da perseguição por causa de uma parede caía
+            // direto em Chase de novo no frame seguinte, e ele voltava a encarar o
+            // obstáculo — só que agora piscando entre os dois estados.
+            if (_senses.IsAware && _giveUpLeft <= 0f)
             {
                 Enter(State.Chase);
                 return;
@@ -213,10 +228,27 @@ namespace Warana.Enemies
             // de costas para o jogador leria como bug, não como pausa.
             _controller.SetFacing(toTarget);
 
-            // Já colado no jogador (ou sem chão à frente) ele para, mas continua alerta.
-            if (_senses.HorizontalDistance <= attackRange || _controller.IsBlockedAhead)
+            // Já colado no jogador ele para, mas continua alerta — é só o cooldown
+            // correndo, e o golpe vem em seguida.
+            if (_senses.HorizontalDistance <= attackRange)
             {
                 _controller.Stop();
+                return;
+            }
+
+            // Parede ou beirada no caminho: perseguir dali vira encarar o obstáculo
+            // para sempre, porque a memória dos sentidos se renova enquanto o jogador
+            // estiver visível do outro lado. Ele desiste, dá meia-volta e volta a
+            // rondar — o mesmo que faria se tivesse batido na parede patrulhando.
+            if (_controller.IsBlockedAhead)
+            {
+                _giveUpLeft = giveUpDuration;
+                _controller.Flip();
+                _controller.Stop();
+
+                // Enter zera o timer, então a pausa da meia-volta vem depois dele.
+                Enter(State.Patrol);
+                _timer = turnPause;
                 return;
             }
 
@@ -307,6 +339,12 @@ namespace Warana.Enemies
             // perto, e o inimigo deixaria de ter uma pergunta a fazer ao jogador.
             if (_state == State.Strike) return;
 
+            // "direction" é o sentido do golpe (de quem bateu para quem apanhou), então
+            // quem bateu está do lado oposto. Sem virar para lá, um golpe pelas costas
+            // deixava o inimigo apanhando de costas até a próxima virada da patrulha.
+            if (!Mathf.Approximately(direction.x, 0f))
+                _controller.SetFacing(direction.x > 0f ? -1 : 1);
+
             _staggerLeft = staggerCooldown;
             Enter(State.Hurt);
         }
@@ -347,6 +385,7 @@ namespace Warana.Enemies
                 case State.Strike:
                     _timer = MadGhostAnimation.DurationOf(MadGhostAnimation.State.Attack);
                     if (_animator != null) _animator.PlayAttack();
+                    AttackStarted?.Invoke();
                     break;
 
                 case State.Sheathe:

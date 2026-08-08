@@ -1,4 +1,5 @@
 using UnityEngine;
+using Warana.Combat;
 using Warana.Player;
 
 namespace Warana.Enemies
@@ -19,7 +20,7 @@ namespace Warana.Enemies
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(GroundSensor2D))]
     [AddComponentMenu("Waraná/Inimigos/Controle de Inimigo 2D")]
-    public class EnemyController2D : MonoBehaviour
+    public class EnemyController2D : MonoBehaviour, IKnockbackReceiver
     {
         [Header("Movimento")]
         [Tooltip("Quão rápido atinge a velocidade pedida. Baixo = inimigo pesado, arranque lento.")]
@@ -56,6 +57,7 @@ namespace Warana.Enemies
         private GroundSensor2D _ground;
         private int _facing = 1;
         private float _targetSpeed;
+        private float _knockbackTimeLeft;
 
         /// <summary>-1 olhando para a esquerda, +1 para a direita.</summary>
         public int FacingDirection => _facing;
@@ -78,6 +80,14 @@ namespace Warana.Enemies
 
         private void FixedUpdate()
         {
+            if (_knockbackTimeLeft > 0f)
+            {
+                _knockbackTimeLeft -= Time.fixedDeltaTime;
+                ApplyGravity();
+                _targetSpeed = 0f;
+                return;
+            }
+
             ApplyHorizontal();
             ApplyGravity();
 
@@ -85,6 +95,16 @@ namespace Warana.Enemies
             // frame. Sem isso, uma IA que troca de estado no meio do caminho deixaria
             // o inimigo deslizando com a última ordem para sempre.
             _targetSpeed = 0f;
+        }
+
+        /// <summary>
+        /// Empurrão de dano: aplica a velocidade e suspende a locomoção da IA por
+        /// <paramref name="duration"/> segundos, deixando só a gravidade agir.
+        /// </summary>
+        public void ApplyKnockback(Vector2 velocity, float duration)
+        {
+            _rb.linearVelocity = velocity;
+            _knockbackTimeLeft = duration;
         }
 
         // ------------------------------------------------------------------ ordens

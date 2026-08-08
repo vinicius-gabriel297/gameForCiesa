@@ -31,9 +31,13 @@ namespace Warana.Player
         private InputAction _attackAction;
         private InputAction _channelAction;
 
-        // TEMP: sem mouse pra testar, Z também entra em canalização. Remover
-        // quando o bind de verdade (RMB) voltar a ser testável.
         private bool _channelHeldPrev;
+
+        // Restrições usadas por cutscenes específicas de mapa (ex.: o Prólogo).
+        // Off por padrão, então nenhum outro mapa é afetado.
+        private bool _forwardOnly;
+        private int _forwardSign = 1;
+        private bool _channelLocked;
 
         /// <summary>Eixo horizontal já com deadzone aplicada, em [-1, 1].</summary>
         public float MoveX { get; private set; }
@@ -45,7 +49,7 @@ namespace Warana.Player
         public bool AttackHeld { get; private set; }
         public bool AttackPressedThisFrame { get; private set; }
 
-        /// <summary>Canalização (RMB). É um estado mantido, não um toque: só o "held" importa.</summary>
+        /// <summary>Canalização (RMB / X / RT do controle). É um estado mantido, não um toque.</summary>
         public bool ChannelHeld { get; private set; }
         public bool ChannelPressedThisFrame { get; private set; }
         public bool ChannelReleasedThisFrame { get; private set; }
@@ -100,10 +104,26 @@ namespace Warana.Player
             ResetState();
         }
 
+        /// <summary>
+        /// Restringe o eixo horizontal a uma única direção (cutscene do Prólogo).
+        /// <paramref name="sign"/> positivo trava o avanço para a direita, negativo para a esquerda.
+        /// </summary>
+        public void SetForwardOnly(bool enabled, int sign = 1)
+        {
+            _forwardOnly = enabled;
+            _forwardSign = sign >= 0 ? 1 : -1;
+        }
+
+        /// <summary>Bloqueia a entrada em Modo de Canalização sem desligar o resto do input.</summary>
+        public void SetChannelLocked(bool locked) => _channelLocked = locked;
+
         private void Update()
         {
             float rawX = _moveAction.ReadValue<Vector2>().x;
-            MoveX = Mathf.Abs(rawX) < deadzone ? 0f : rawX;
+            rawX = Mathf.Abs(rawX) < deadzone ? 0f : rawX;
+
+            // Só permite o eixo quando aponta na direção travada (ou fica parado).
+            MoveX = _forwardOnly && Mathf.Sign(rawX) != _forwardSign ? 0f : rawX;
 
             JumpHeld = _jumpAction.IsPressed();
             JumpPressedThisFrame = _jumpAction.WasPressedThisFrame();
@@ -117,10 +137,7 @@ namespace Warana.Player
 
             bool actionHeld = _channelAction != null && _channelAction.IsPressed();
 
-            // TEMP: fallback de teclado enquanto não há mouse pra testar o RMB.
-            bool zHeld = Keyboard.current != null && Keyboard.current.zKey.isPressed;
-
-            ChannelHeld = actionHeld || zHeld;
+            ChannelHeld = !_channelLocked && actionHeld;
             ChannelPressedThisFrame = ChannelHeld && !_channelHeldPrev;
             ChannelReleasedThisFrame = !ChannelHeld && _channelHeldPrev;
             _channelHeldPrev = ChannelHeld;

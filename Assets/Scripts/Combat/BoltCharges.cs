@@ -122,5 +122,18 @@ namespace Warana.Combat
             RefillProgress = 0f;
             Changed?.Invoke(Current, maxCharges);
         }
+
+        /// <summary>
+        /// Aumenta o número máximo de cargas e concede o mesmo tanto já carregado.
+        /// Usado por recompensas (ex.: raio extra por abates).
+        /// </summary>
+        public void IncreaseMaxCharges(int amount)
+        {
+            if (amount <= 0) return;
+
+            maxCharges += amount;
+            Current = Mathf.Min(maxCharges, Current + amount);
+            Changed?.Invoke(Current, maxCharges);
+        }
     }
 }

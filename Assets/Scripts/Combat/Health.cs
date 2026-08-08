@@ -26,12 +26,16 @@ namespace Warana.Combat
         [Tooltip("Empurrão na direção do golpe. Precisa de Rigidbody2D dinâmico para valer.")]
         [SerializeField] private float knockback = 3f;
 
+        [Tooltip("Duração do empurrão. Durante esse tempo o controller suspende o controle normal de movimento.")]
+        [SerializeField] private float knockbackDuration = 0.15f;
+
         [Header("Morte")]
         [Tooltip("Desativa o objeto ao morrer. Desligue para tratar a morte por evento.")]
         [SerializeField] private bool disableOnDeath = true;
 
         private SpriteRenderer _renderer;
         private Rigidbody2D _body;
+        private IKnockbackReceiver _knockbackReceiver;
         private Color _baseColor;
         private float _flashLeft;
         private float _invulnerableLeft;
@@ -58,6 +62,7 @@ namespace Warana.Combat
             Current = maxHealth;
             _renderer = GetComponentInChildren<SpriteRenderer>();
             _body = GetComponent<Rigidbody2D>();
+            _knockbackReceiver = GetComponent<IKnockbackReceiver>();
 
             if (_renderer != null) _baseColor = _renderer.color;
         }
@@ -94,8 +99,18 @@ namespace Warana.Combat
                 _flashLeft = flashDuration;
             }
 
-            if (_body != null && _body.bodyType == RigidbodyType2D.Dynamic && knockback > 0f)
-                _body.linearVelocity = direction.normalized * knockback;
+            if (knockback > 0f)
+            {
+                Vector2 impulse = direction.normalized * knockback;
+
+                // O controller próprio sabe suspender o input sem perder o resto do
+                // estado (pulo, gravidade); sem ele, a velocidade escrita aqui seria
+                // sobrescrita no próximo FixedUpdate do movimento normal.
+                if (_knockbackReceiver != null)
+                    _knockbackReceiver.ApplyKnockback(impulse, knockbackDuration);
+                else if (_body != null && _body.bodyType == RigidbodyType2D.Dynamic)
+                    _body.linearVelocity = impulse;
+            }
 
             Changed?.Invoke(Current, maxHealth);
             Damaged?.Invoke(amount, direction.normalized);
@@ -111,6 +126,19 @@ namespace Warana.Combat
         {
             if (amount <= 0f) return;
 
+            Current = Mathf.Min(maxHealth, Current + amount);
+            Changed?.Invoke(Current, maxHealth);
+        }
+
+        /// <summary>
+        /// Aumenta a vida máxima e cura o mesmo tanto. Usado por recompensas (ex.:
+        /// coração extra por abates) — o slot novo já nasce cheio.
+        /// </summary>
+        public void IncreaseMaxHealth(float amount)
+        {
+            if (amount <= 0f) return;
+
+            maxHealth += amount;
             Current = Mathf.Min(maxHealth, Current + amount);
             Changed?.Invoke(Current, maxHealth);
         }

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Warana.Combat;
 
 namespace Warana.Player
 {
@@ -11,7 +13,7 @@ namespace Warana.Player
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(GroundSensor2D))]
     [RequireComponent(typeof(PlayerInputHandler))]
-    public class PlayerController2D : MonoBehaviour
+    public class PlayerController2D : MonoBehaviour, IKnockbackReceiver
     {
         [Header("Movimento Horizontal")]
         [Tooltip("Velocidade máxima de corrida, em unidades/segundo.")]
@@ -69,7 +71,11 @@ namespace Warana.Player
         private float _jumpBufferCounter;
         private bool _isJumping;
         private bool _controlFrozen;
+        private float _knockbackTimeLeft;
         private int _facing = 1;
+
+        /// <summary>Disparado no frame em que o pulo sai — o gancho de áudio escuta.</summary>
+        public event Action Jumped;
 
         /// <summary>-1 olhando para a esquerda, +1 para a direita.</summary>
         public int FacingDirection => _facing;
@@ -117,6 +123,13 @@ namespace Warana.Player
                     _abilities[i].OnLanded();
             }
 
+            if (_knockbackTimeLeft > 0f)
+            {
+                _knockbackTimeLeft -= Time.fixedDeltaTime;
+                ApplyGravity();
+                return;
+            }
+
             PlayerAbility active = ResolveActiveAbility();
             if (active != null)
             {
@@ -156,6 +169,8 @@ namespace Warana.Player
             // Consome ambas as janelas: sem isso um único toque geraria pulos repetidos.
             _jumpBufferCounter = 0f;
             _coyoteCounter = 0f;
+
+            Jumped?.Invoke();
         }
 
         private void ApplyHorizontal(float inputX)
@@ -217,6 +232,17 @@ namespace Warana.Player
         public void SetVelocity(Vector2 velocity) => _rb.linearVelocity = velocity;
 
         public void AddImpulse(Vector2 impulse) => _rb.linearVelocity += impulse;
+
+        /// <summary>
+        /// Empurrão de dano: aplica a velocidade e suspende pulo/movimento por
+        /// <paramref name="duration"/> segundos, deixando só a gravidade agir.
+        /// </summary>
+        public void ApplyKnockback(Vector2 velocity, float duration)
+        {
+            _rb.linearVelocity = velocity;
+            _knockbackTimeLeft = duration;
+            _isJumping = false;
+        }
 
         /// <summary>Bloqueia o input de movimento sem desligar a física (knockback, diálogo).</summary>
         public void FreezeControl(bool frozen) => _controlFrozen = frozen;

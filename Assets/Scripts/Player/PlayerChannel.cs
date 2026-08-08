@@ -28,6 +28,7 @@ namespace Warana.Player
         [SerializeField] private float aimHeight = 0.55f;
 
         private float _elapsed;
+        private bool _scripted;
 
         /// <summary>Disparado ao entrar (true) e ao sair (false) da canalização.</summary>
         public event Action<bool> ChannelingChanged;
@@ -68,8 +69,12 @@ namespace Warana.Player
             // movimento aplicado) é o que faz a virada continuar respondendo mesmo
             // com o controle congelado.
             float inputX = Input.MoveX;
-            if (!Mathf.Approximately(inputX, 0f))
+            if (!_scripted && !Mathf.Approximately(inputX, 0f))
                 Controller.SetFacing(inputX > 0f ? 1 : -1);
+
+            // Enquanto scripted, só quem chamou EndScripted() encerra — a cutscene
+            // não deve depender do RMB estar solto para continuar segurando a pose.
+            if (_scripted) return;
 
             if (_elapsed < minimumDuration) return;
 
@@ -81,6 +86,30 @@ namespace Warana.Player
         public void Cancel()
         {
             if (IsActive) Stop();
+        }
+
+        /// <summary>
+        /// Força a pose de canalização a partir de uma cutscene, sem exigir o RMB
+        /// segurado. Dura até <see cref="EndScripted"/> ser chamado.
+        /// </summary>
+        public void BeginScripted()
+        {
+            if (IsActive) return;
+
+            _scripted = true;
+            _elapsed = 0f;
+            IsActive = true;
+            Controller.FreezeControl(true);
+            ChannelingChanged?.Invoke(true);
+        }
+
+        /// <summary>Encerra uma canalização iniciada por <see cref="BeginScripted"/>.</summary>
+        public void EndScripted()
+        {
+            if (!_scripted) return;
+
+            _scripted = false;
+            Stop();
         }
 
         private void Stop()

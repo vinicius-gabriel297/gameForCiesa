@@ -154,7 +154,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 0
   spriteMeshType: 0
   alignment: 0
@@ -208,815 +208,639 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_0
+      name: Abomination_Idle_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2282a3fa01d29cd44938b7748e48b18f
+      internalID: -1241642410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Idle_1
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 192
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab71376c232358f46b242ba0845f1379
+      internalID: 1350388278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Idle_2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 192
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee5a6053ac116474e8b9eb837547f5b6
+      internalID: 1027375725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Idle_3
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 192
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 276591c07ec8cf64686a9a69bc5a8353
+      internalID: 460175944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Walk_0
       rect:
         serializedVersion: 2
         x: 0
         y: 144
-        width: 49
-        height: 96
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0b6d40507f31b8350800000000000000
-      internalID: 6019927278572852912
+      spriteID: 84fa6dd79e540124f90716c8bb125886
+      internalID: 918606737
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_1
+      name: Abomination_Walk_1
       rect:
         serializedVersion: 2
         x: 112
         y: 144
-        width: 49
-        height: 96
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ade8dd0d6146d0de0800000000000000
-      internalID: -1365325062867153190
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_2
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 192
-        width: 50
+        width: 112
         height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a97f407cbcab9da80800000000000000
-      internalID: -8441510642149165158
+      spriteID: eb381036e47621247857237e49a60ec9
+      internalID: -827446249
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_3
-      rect:
-        serializedVersion: 2
-        x: 336
-        y: 192
-        width: 49
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 89a4cb06d49ab4d90800000000000000
-      internalID: -7112405036701037928
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_4
-      rect:
-        serializedVersion: 2
-        x: 336
-        y: 144
-        width: 49
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2421f9861ff0a2840800000000000000
-      internalID: 5199986249269449282
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_5
-      rect:
-        serializedVersion: 2
-        x: 113
-        y: 96
-        width: 41
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ce6de520845eb7430800000000000000
-      internalID: 3781868409547839212
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_6
+      name: Abomination_Walk_2
       rect:
         serializedVersion: 2
         x: 224
         y: 144
-        width: 50
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 87cf5b9ba44b89150800000000000000
-      internalID: 5879647546568473720
+      spriteID: 7bd15d93353a205488786b9fac779538
+      internalID: 577384634
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_7
+      name: Abomination_Walk_3
       rect:
         serializedVersion: 2
-        x: 225
-        y: 96
-        width: 41
+        x: 336
+        y: 144
+        width: 112
         height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a7ee65228163fca70800000000000000
-      internalID: 8849351270089551482
+      spriteID: 3bc21a017dc58a049827e5d734525ecd
+      internalID: -2017052426
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_8
+      name: Abomination_Attack_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 96
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90901641bae417847b309c838b7aff5d
+      internalID: -1940397435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Attack_1
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 96
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42084b0af66eb2843a6f38d266faf9fa
+      internalID: 679975370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Attack_2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 96
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5eda0118230da6c4aa228c7deb44a06d
+      internalID: -1420369657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Attack_3
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 96
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15340e484a75cbc469fae7ee57b68be9
+      internalID: 1999393698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Attack_4
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 96
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2816720ae1a75bc47a8b5ae422375be5
+      internalID: -1066820011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Attack_5
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 96
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f43fccbee61bee4b90d9aae00c51e6c
+      internalID: -500867259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Attack_6
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 96
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fc9e32abce33ba449efe0c73f310fc1
+      internalID: 1101511825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Attack_7
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 96
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bb76cc2c7a3b0845a0e90067af3a27c
+      internalID: 2095864955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Attack_8
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 96
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d3e14c40f172a949a71e0fc5df8b84d
+      internalID: -472407947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Abomination_Attack_9
       rect:
         serializedVersion: 2
         x: 1008
         y: 96
-        width: 49
+        width: 112
         height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e65976526514042e0800000000000000
-      internalID: -2143641584377817746
+      spriteID: af929f66271889d4ba176cc16c25d813
+      internalID: -1097340375
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_9
+      name: Abomination_Hit_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 48
-        width: 47
+        width: 112
         height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2bf3067a79597f2e0800000000000000
-      internalID: -2092039023309602894
+      spriteID: 429466c8ac8519d46b08975558f1b81b
+      internalID: 418999285
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_10
+      name: Abomination_Hit_1
       rect:
         serializedVersion: 2
-        x: 2
-        y: 96
-        width: 43
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 840cca752b55430a0800000000000000
-      internalID: -6902798104388648888
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_11
-      rect:
-        serializedVersion: 2
-        x: 113
+        x: 112
         y: 48
-        width: 47
+        width: 112
         height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2fb329d82fed9f0a0800000000000000
-      internalID: -6847196625101505550
+      spriteID: 26b7144b20f4b254293e6d3b5514ee59
+      internalID: -316916521
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_12
+      name: Abomination_Death_0
       rect:
         serializedVersion: 2
-        x: 340
-        y: 96
-        width: 74
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bc69e55a934c87bd0800000000000000
-      internalID: -2632138230331435317
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_13
-      rect:
-        serializedVersion: 2
-        x: 452
-        y: 96
-        width: 102
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8f36556e71a63a3f0800000000000000
-      internalID: -890751650408078344
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_14
-      rect:
-        serializedVersion: 2
-        x: 564
-        y: 96
-        width: 107
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 08be7871f656a8870800000000000000
-      internalID: 8685866359147981696
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_15
-      rect:
-        serializedVersion: 2
-        x: 674
-        y: 96
-        width: 107
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 506b4997addbf1290800000000000000
-      internalID: -7917400873853733371
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_16
-      rect:
-        serializedVersion: 2
-        x: 787
-        y: 96
-        width: 75
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9516c5aa713a1d930800000000000000
-      internalID: 4166290452332175705
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_17
-      rect:
-        serializedVersion: 2
-        x: 897
-        y: 96
-        width: 47
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a79feceb2817f7350800000000000000
-      internalID: 6016652433551194490
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_18
-      rect:
-        serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 47
+        width: 112
         height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 289a62ead9b8dd780800000000000000
-      internalID: -8656609399388329598
+      spriteID: 52c30c01ba03357418e1567074888cc1
+      internalID: 1426446880
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_19
+      name: Abomination_Death_1
       rect:
         serializedVersion: 2
-        x: 113
+        x: 112
         y: 0
-        width: 47
+        width: 112
         height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e04dbfed6ae5449a0800000000000000
-      internalID: -6249766312084777970
+      spriteID: 16869ab31c4a45848a9f611965a07814
+      internalID: -1946113454
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_20
+      name: Abomination_Death_2
       rect:
         serializedVersion: 2
-        x: 225
+        x: 224
         y: 0
-        width: 47
+        width: 112
         height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d369e828a466051f0800000000000000
-      internalID: -1058233442228070851
+      spriteID: 77dd5184c3aac644eb36d1595a3c6f86
+      internalID: -216729132
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_21
+      name: Abomination_Death_3
       rect:
         serializedVersion: 2
-        x: 341
-        y: 1
-        width: 42
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 336
+        y: 0
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8b9b161cce0661020800000000000000
-      internalID: 2312142028674283960
+      spriteID: 4cb17cd6af28bff4ea3cf5bfa33d8b24
+      internalID: -1275544574
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_22
+      name: Abomination_Death_4
       rect:
         serializedVersion: 2
-        x: 450
-        y: 2
-        width: 44
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 448
+        y: 0
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 29d343564ac453570800000000000000
-      internalID: 8445740945159503250
+      spriteID: 570caed98231e484abcd4a0bc8074ee2
+      internalID: -1934865217
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_23
+      name: Abomination_Death_5
       rect:
         serializedVersion: 2
-        x: 476
-        y: 30
-        width: 4
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 560
+        y: 0
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1f14eb3572bae3890800000000000000
-      internalID: -7476350145991392783
+      spriteID: df26c6a74fd33c8439a79f58012a74c4
+      internalID: 1477832962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_24
+      name: Abomination_Death_6
       rect:
         serializedVersion: 2
-        x: 562
-        y: 3
-        width: 44
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 672
+        y: 0
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 401de3d6b573ab2b0800000000000000
-      internalID: -5568077123475812092
+      spriteID: 8bd9f47cfd380a84e8a1e6850078fb69
+      internalID: 948626769
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_25
+      name: Abomination_Death_7
       rect:
         serializedVersion: 2
-        x: 674
-        y: 4
-        width: 41
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 784
+        y: 0
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 60696b00d05cb1c80800000000000000
-      internalID: -8350864424391240186
+      spriteID: 56866ef6a87a3c547a2d8dd830484798
+      internalID: -1706700949
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_26
+      name: Abomination_Death_8
       rect:
         serializedVersion: 2
-        x: 799
-        y: 33
-        width: 24
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 896
+        y: 0
+        width: 112
+        height: 48
+      alignment: 9
+      pivot: {x: 0.21875, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 913df2e0bb4a84410800000000000000
-      internalID: 1461599202385580825
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_27
-      rect:
-        serializedVersion: 2
-        x: 913
-        y: 37
-        width: 8
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ae0287cac50122dd0800000000000000
-      internalID: -2512427651902725910
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_28
-      rect:
-        serializedVersion: 2
-        x: 917
-        y: 43
-        width: 6
-        height: 4
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 364b8e33a424316a0800000000000000
-      internalID: -6479762552390110109
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_29
-      rect:
-        serializedVersion: 2
-        x: 338
-        y: 33
-        width: 4
-        height: 4
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 297d073ab21af9ea0800000000000000
-      internalID: -5863790981015349358
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_30
-      rect:
-        serializedVersion: 2
-        x: 339
-        y: 21
-        width: 5
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 224e86186e09f94e0800000000000000
-      internalID: -1972698792076975070
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_31
-      rect:
-        serializedVersion: 2
-        x: 343
-        y: 12
-        width: 5
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d8cd36b7c96816530800000000000000
-      internalID: 3846503563394276493
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_32
-      rect:
-        serializedVersion: 2
-        x: 570
-        y: 13
-        width: 5
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 19d6e3e3ab75a3110800000000000000
-      internalID: 1241401104713805201
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_33
-      rect:
-        serializedVersion: 2
-        x: 577
-        y: 20
-        width: 7
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 441b7976a484e8d20800000000000000
-      internalID: 3282640662802444612
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_34
-      rect:
-        serializedVersion: 2
-        x: 344
-        y: 1
-        width: 4
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: be8353e763ec6f700800000000000000
-      internalID: 573872735977289963
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_35
-      rect:
-        serializedVersion: 2
-        x: 483
-        y: 4
-        width: 5
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 669d45c760724c880800000000000000
-      internalID: -8591699280306841242
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Abomination-Sheet Separated Tags_36
-      rect:
-        serializedVersion: 2
-        x: 485
-        y: 9
-        width: 10
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: eec0028b16dea2090800000000000000
-      internalID: -8058367579269362450
+      spriteID: 483c522d99d627b40a8e2cb42a236527
+      internalID: -947872905
       vertices: []
       indices: 
       edges: []
@@ -1034,7 +858,36 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Abomination_Attack_0: -1940397435
+      Abomination_Attack_1: 679975370
+      Abomination_Attack_2: -1420369657
+      Abomination_Attack_3: 1999393698
+      Abomination_Attack_4: -1066820011
+      Abomination_Attack_5: -500867259
+      Abomination_Attack_6: 1101511825
+      Abomination_Attack_7: 2095864955
+      Abomination_Attack_8: -472407947
+      Abomination_Attack_9: -1097340375
+      Abomination_Death_0: 1426446880
+      Abomination_Death_1: -1946113454
+      Abomination_Death_2: -216729132
+      Abomination_Death_3: -1275544574
+      Abomination_Death_4: -1934865217
+      Abomination_Death_5: 1477832962
+      Abomination_Death_6: 948626769
+      Abomination_Death_7: -1706700949
+      Abomination_Death_8: -947872905
+      Abomination_Hit_0: 418999285
+      Abomination_Hit_1: -316916521
+      Abomination_Idle_0: -1241642410
+      Abomination_Idle_1: 1350388278
+      Abomination_Idle_2: 1027375725
+      Abomination_Idle_3: 460175944
+      Abomination_Walk_0: 918606737
+      Abomination_Walk_1: -827446249
+      Abomination_Walk_2: 577384634
+      Abomination_Walk_3: -2017052426
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
