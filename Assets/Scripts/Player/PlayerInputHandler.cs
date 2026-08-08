@@ -31,6 +31,10 @@ namespace Warana.Player
         private InputAction _attackAction;
         private InputAction _channelAction;
 
+        // TEMP: sem mouse pra testar, Z também entra em canalização. Remover
+        // quando o bind de verdade (RMB) voltar a ser testável.
+        private bool _channelHeldPrev;
+
         /// <summary>Eixo horizontal já com deadzone aplicada, em [-1, 1].</summary>
         public float MoveX { get; private set; }
 
@@ -111,11 +115,15 @@ namespace Warana.Player
                 AttackPressedThisFrame = _attackAction.WasPressedThisFrame();
             }
 
-            if (_channelAction == null) return;
+            bool actionHeld = _channelAction != null && _channelAction.IsPressed();
 
-            ChannelHeld = _channelAction.IsPressed();
-            ChannelPressedThisFrame = _channelAction.WasPressedThisFrame();
-            ChannelReleasedThisFrame = _channelAction.WasReleasedThisFrame();
+            // TEMP: fallback de teclado enquanto não há mouse pra testar o RMB.
+            bool zHeld = Keyboard.current != null && Keyboard.current.zKey.isPressed;
+
+            ChannelHeld = actionHeld || zHeld;
+            ChannelPressedThisFrame = ChannelHeld && !_channelHeldPrev;
+            ChannelReleasedThisFrame = !ChannelHeld && _channelHeldPrev;
+            _channelHeldPrev = ChannelHeld;
         }
 
         private void ResetState()
@@ -129,6 +137,7 @@ namespace Warana.Player
             ChannelHeld = false;
             ChannelPressedThisFrame = false;
             ChannelReleasedThisFrame = false;
+            _channelHeldPrev = false;
         }
     }
 }

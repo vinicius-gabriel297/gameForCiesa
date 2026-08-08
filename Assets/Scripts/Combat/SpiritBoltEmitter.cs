@@ -226,8 +226,10 @@ namespace Warana.Combat
                 Vector2 point = candidate.bounds.center;
                 Vector2 delta = point - origin;
 
-                // Atrás das costas nunca conta, nem que esteja colado.
-                if (delta.x * facing.x <= 0f) continue;
+                // Atrás das costas nunca conta, nem que esteja colado. A folga evita
+                // rejeitar por ruído de ponto flutuante quando o alvo está tão perto
+                // que delta.x beira zero (quase alinhado no eixo vertical).
+                if (delta.x * facing.x < -0.001f) continue;
                 if (Vector2.Angle(facing, delta) > coneHalfAngle) continue;
 
                 float distance = delta.magnitude;
@@ -363,7 +365,22 @@ namespace Warana.Combat
             if (fireSounds == null || fireSounds.Length == 0) return;
 
             AudioClip clip = fireSounds[Random.Range(0, fireSounds.Length)];
-            if (clip != null) AudioSource.PlayClipAtPoint(clip, at, fireVolume);
+            if (clip == null) return;
+
+            // PlayClipAtPoint usa spatialBlend 3D por padrão, e a câmera fica a 10
+            // unidades de distância em Z do plano de jogo: a atenuação por distância
+            // deixava o raio quase inaudível mesmo com o alvo colado na câmera.
+            // Como som 2D não há esse problema.
+            var go = new GameObject("SpiritBoltSFX");
+            go.transform.position = at;
+
+            var source = go.AddComponent<AudioSource>();
+            source.clip = clip;
+            source.spatialBlend = 0f;
+            source.volume = fireVolume;
+            source.Play();
+
+            Destroy(go, clip.length);
         }
 
         // --------------------------------------------------------------- gizmos
