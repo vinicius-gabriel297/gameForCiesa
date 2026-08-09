@@ -90691,7 +90691,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0c252bb43c1a1804ebbaffd56f799f4c, type: 3}
   stepInterval: 0.5
   footstepPitchVariation: 0.072
-  footstepVolume: 0.2
+  footstepVolume: 0.055
   jumpClip: {fileID: 8300000, guid: 778862c2312ed174d9b3b28329b2358f, type: 3}
   damageClip: {fileID: 8300000, guid: 9c2720ebad701c24487b5e3410130bb1, type: 3}
   deathClip: {fileID: 8300000, guid: 25c82b9177a75314ba74485834d85ec8, type: 3}
