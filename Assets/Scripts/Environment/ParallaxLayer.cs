@@ -16,8 +16,13 @@ namespace Warana.Environment
     /// que se afasta mais de uma largura de sprite da câmera, o ponto de origem salta uma
     /// largura — invisível porque o <see cref="SpriteRenderer"/> está em
     /// <see cref="SpriteDrawMode.Tiled"/> (o padrão da imagem se repete a cada largura).
+    ///
+    /// <para>Só roda em play mode, de propósito: com <c>ExecuteAlways</c> o script
+    /// reescrevia a posição da camada a cada frame do editor usando a posição atual da
+    /// câmera, e era essa posição deslocada que ia para o arquivo da cena — a cada reload
+    /// a camada partia de um ponto diferente do autorado. Sem ele, o que está salvo na
+    /// cena é sempre a posição de autoria.</para>
     /// </summary>
-    [ExecuteAlways]
     [RequireComponent(typeof(SpriteRenderer))]
     public class ParallaxLayer : MonoBehaviour
     {

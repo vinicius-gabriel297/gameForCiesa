@@ -142621,7 +142621,7 @@ Transform:
   m_GameObject: {fileID: 119421136}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -49.346992, y: 3.5, z: 0}
+  m_LocalPosition: {x: -49.346992, y: 0, z: 0}
   m_LocalScale: {x: 2.4, y: 2.4, z: 2.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -142641,7 +142641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Warana.Environment.ParallaxLayer
   parallaxFactor: 0.65
   infiniteHorizontal: 1
-  followVertical: 0
+  followVertical: 1
 --- !u!212 &119421139
 SpriteRenderer:
   serializedVersion: 3
@@ -142696,7 +142696,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 120, y: 5}
+  m_Size: {x: 120, y: 2.88}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -142734,7 +142734,7 @@ Transform:
   m_GameObject: {fileID: 186085508}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -38.615993, y: 1.4399998, z: 0}
+  m_LocalPosition: {x: -38.615993, y: 0, z: 0}
   m_LocalScale: {x: 2.4, y: 2.4, z: 2.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -142754,7 +142754,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Warana.Environment.ParallaxLayer
   parallaxFactor: 0.4
   infiniteHorizontal: 1
-  followVertical: 0
+  followVertical: 1
 --- !u!212 &186085511
 SpriteRenderer:
   serializedVersion: 3
@@ -148622,7 +148622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &351978647
 SpriteRenderer:
   serializedVersion: 3
@@ -152338,7 +152338,7 @@ Transform:
   m_GameObject: {fileID: 807249949}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -52.450577, y: 1.5892961, z: 0}
+  m_LocalPosition: {x: -52.49135, y: 1.4692533, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -152962,8 +152962,8 @@ Transform:
   m_GameObject: {fileID: 926804967}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -48.48, y: 2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -48.48, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1590502279}
@@ -152982,7 +152982,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Warana.Environment.ParallaxLayer
   parallaxFactor: 0.9
   infiniteHorizontal: 1
-  followVertical: 0
+  followVertical: 1
 --- !u!212 &926804970
 SpriteRenderer:
   serializedVersion: 3
@@ -153037,7 +153037,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 120, y: 22}
+  m_Size: {x: 120, y: 2.88}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -175853,7 +175853,7 @@ Transform:
   m_GameObject: {fileID: 1855258795}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -42.596992, y: 1.4399998, z: 0}
+  m_LocalPosition: {x: -42.596992, y: 0, z: 0}
   m_LocalScale: {x: 2.4, y: 2.4, z: 2.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -175873,7 +175873,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Warana.Environment.ParallaxLayer
   parallaxFactor: 0.55
   infiniteHorizontal: 1
-  followVertical: 0
+  followVertical: 1
 --- !u!212 &1855258798
 SpriteRenderer:
   serializedVersion: 3
@@ -176179,7 +176179,7 @@ Transform:
   m_GameObject: {fileID: 1944280913}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -43.808994, y: 3.5, z: 0}
+  m_LocalPosition: {x: -43.808994, y: 0, z: 0}
   m_LocalScale: {x: 2.4, y: 2.4, z: 2.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -176199,7 +176199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Warana.Environment.ParallaxLayer
   parallaxFactor: 0.75
   infiniteHorizontal: 1
-  followVertical: 0
+  followVertical: 1
 --- !u!212 &1944280916
 SpriteRenderer:
   serializedVersion: 3
@@ -176254,7 +176254,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 120, y: 5}
+  m_Size: {x: 120, y: 2.88}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
