@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Warana.Audio;
 
 namespace Warana.UI
 {
@@ -45,7 +46,9 @@ namespace Warana.UI
 
             if (volumeSlider != null)
             {
-                volumeSlider.value = AudioListener.volume;
+                // O slider reflete o volume salvo, não o que estiver serializado nele —
+                // senão a escolha do jogador se perde a cada abertura do menu.
+                volumeSlider.SetValueWithoutNotify(MasterVolume.Value);
                 volumeSlider.onValueChanged.AddListener(SetMasterVolume);
             }
 
@@ -67,13 +70,16 @@ namespace Warana.UI
 
         public void CloseOptions()
         {
+            MasterVolume.Flush();
             if (optionsPanel != null) optionsPanel.SetActive(false);
         }
 
-        public void SetMasterVolume(float value) => AudioListener.volume = value;
+        public void SetMasterVolume(float value) => MasterVolume.Value = value;
 
         public void QuitGame()
         {
+            MasterVolume.Flush();
+
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else

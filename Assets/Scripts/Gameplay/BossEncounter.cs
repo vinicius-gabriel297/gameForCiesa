@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using Warana.Combat;
 using Warana.Enemies;
@@ -38,6 +39,20 @@ namespace Warana.Gameplay
         [Tooltip("Cena carregada depois do fade.")]
         [SerializeField] private string menuSceneName = "MainMenu";
 
+        [Header("Epílogo")]
+        [Tooltip("Frase escrita sobre a tela preta depois que a chefe cai.")]
+        [TextArea]
+        [SerializeField] private string victoryMessage = "A floresta volta a respirar";
+
+        [Tooltip("Entrada e saída da frase.")]
+        [SerializeField] private float messageFadeDuration = 1f;
+
+        [Tooltip("Quanto tempo a frase fica parada na tela, já legível.")]
+        [SerializeField] private float messageHold = 3f;
+
+        [Tooltip("Fonte do epílogo. Vazia = empresta a de algum texto da cena.")]
+        [SerializeField] private TMP_FontAsset messageFont;
+
         private EnemySenses2D _senses;
         private Health _health;
         private float _baseMusicVolume;
@@ -50,6 +65,14 @@ namespace Warana.Gameplay
             _health = GetComponent<Health>();
 
             if (musicSource != null) _baseMusicVolume = musicSource.volume;
+
+            // A fonte é pega agora, com a fase inteira ainda em pé: na hora do
+            // epílogo a HUD e a abertura já podem ter sido desligadas.
+            if (messageFont == null)
+            {
+                var anyText = FindAnyObjectByType<TMP_Text>(FindObjectsInactive.Include);
+                if (anyText != null) messageFont = anyText.font;
+            }
         }
 
         private void OnEnable() => _health.Died += OnBossDefeated;
@@ -91,7 +114,8 @@ namespace Warana.Gameplay
             // uma tela já preta entrega que o corte foi só visual.
             if (musicSource != null) StartCoroutine(Fade(musicSource.volume, 0f, fadeDuration));
 
-            ScreenFader.Get().FadeToBlackAndLoad(menuSceneName, fadeDuration);
+            ScreenFader.Get().FadeToBlackWithMessage(
+                menuSceneName, victoryMessage, fadeDuration, messageFadeDuration, messageHold, messageFont);
         }
 
         private IEnumerator Fade(float from, float to, float duration)

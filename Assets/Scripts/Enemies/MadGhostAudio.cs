@@ -17,6 +17,14 @@ namespace Warana.Enemies
         [SerializeField] private AudioClip attackClip;
         [SerializeField] private AudioClip deathClip;
 
+        [Header("Volume por som")]
+        [Tooltip("Ganho de cada som sobre o volume do AudioSource, que fica em 1.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float attackVolume = 0.85f;
+
+        [Range(0f, 1f)]
+        [SerializeField] private float deathVolume = 0.9f;
+
         [Header("Câmera")]
         [Tooltip("Tremor ao acertar o golpe nele. Força 0 desliga.")]
         [SerializeField] private float hitShakeDuration = 0.06f;
@@ -55,21 +63,21 @@ namespace Warana.Enemies
             _health.Died -= OnDied;
         }
 
-        private void PlayAttack() => PlayOneShot(attackClip);
+        private void PlayAttack() => PlayOneShot(attackClip, attackVolume);
 
         private void OnDamaged(float amount, Vector2 direction) =>
             CameraFollow2D.Instance?.Shake(hitShakeDuration, hitShakeMagnitude);
 
         private void OnDied()
         {
-            PlayOneShot(deathClip);
+            PlayOneShot(deathClip, deathVolume);
             CameraFollow2D.Instance?.Shake(deathShakeDuration, deathShakeMagnitude);
         }
 
-        private void PlayOneShot(AudioClip clip)
+        private void PlayOneShot(AudioClip clip, float volume)
         {
             if (clip == null) return;
-            _source.PlayOneShot(clip);
+            _source.PlayOneShot(clip, volume);
         }
     }
 }

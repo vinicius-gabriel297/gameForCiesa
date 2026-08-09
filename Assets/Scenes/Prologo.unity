@@ -79552,7 +79552,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.6
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -79720,7 +79720,7 @@ MonoBehaviour:
   guaranaEye: {fileID: 807249951}
   waranaVoiceClip: {fileID: 8300000, guid: 451b208b0a3d4d74bb006d76c982d063, type: 3}
   guaranaSkyHeight: 6
-  guaranaDescendDuration: 1.8
+  guaranaDescendDuration: 3
   dialogueGroup: {fileID: 1247144244}
   dialogueText: {fileID: 1247144241}
   lineFadeDuration: 0.35
@@ -84323,7 +84323,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 21538f6160ff48040a8488deb4ed6d5e, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -90691,9 +90691,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0c252bb43c1a1804ebbaffd56f799f4c, type: 3}
   stepInterval: 0.5
   footstepPitchVariation: 0.072
+  footstepVolume: 0.2
   jumpClip: {fileID: 8300000, guid: 778862c2312ed174d9b3b28329b2358f, type: 3}
   damageClip: {fileID: 8300000, guid: 9c2720ebad701c24487b5e3410130bb1, type: 3}
   deathClip: {fileID: 8300000, guid: 25c82b9177a75314ba74485834d85ec8, type: 3}
+  jumpVolume: 0.7
+  damageVolume: 0.9
+  deathVolume: 1
   damageShakeDuration: 0.15
   damageShakeMagnitude: 0.12
   deathShakeDuration: 0.25
@@ -90711,7 +90715,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.01
+  m_Volume: 0.754
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -101594,13 +101598,13 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 4a90f6ecba65c9e41a3fd09e86e54bd4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 112
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -106641,13 +106645,13 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.9
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 165
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -106872,6 +106876,9 @@ MonoBehaviour:
   lookAheadDistance: 1.5
   lookAheadSmoothTime: 0.2
   shakeStrength: 1
+  useBounds: 0
+  boundsMin: {x: 0, y: 0}
+  boundsMax: {x: 0, y: 0}
 --- !u!114 &1816444026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107464,13 +107471,13 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.963
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 92
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500

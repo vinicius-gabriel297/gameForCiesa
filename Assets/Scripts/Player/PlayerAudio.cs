@@ -24,10 +24,25 @@ namespace Warana.Player
         [Range(0f, 0.3f)]
         [SerializeField] private float footstepPitchVariation = 0.08f;
 
+        [Tooltip("Passo é o som mais repetido do jogo, então toca bem abaixo do resto.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float footstepVolume = 0.35f;
+
         [Header("Ações")]
         [SerializeField] private AudioClip jumpClip;
         [SerializeField] private AudioClip damageClip;
         [SerializeField] private AudioClip deathClip;
+
+        [Header("Volume por som")]
+        [Tooltip("Ganho de cada ação sobre o volume do AudioSource, que fica em 1.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float jumpVolume = 0.7f;
+
+        [Range(0f, 1f)]
+        [SerializeField] private float damageVolume = 0.9f;
+
+        [Range(0f, 1f)]
+        [SerializeField] private float deathVolume = 1f;
 
         [Header("Câmera")]
         [Tooltip("Tremor ao levar dano (duração, força). Força 0 desliga.")]
@@ -86,37 +101,40 @@ namespace Warana.Player
             if (_stepTimer > 0f) return;
 
             _stepTimer = stepInterval;
-            PlayRandom(footstepClips, footstepPitchVariation);
+            PlayRandom(footstepClips, footstepPitchVariation, footstepVolume);
         }
 
-        private void PlayJump() => PlayOneShot(jumpClip);
+        private void PlayJump() => PlayOneShot(jumpClip, jumpVolume);
 
         private void OnDamaged(float amount, Vector2 direction)
         {
-            PlayOneShot(damageClip);
+            PlayOneShot(damageClip, damageVolume);
             CameraFollow2D.Instance?.Shake(damageShakeDuration, damageShakeMagnitude);
         }
 
         private void OnDied()
         {
-            PlayOneShot(deathClip);
+            PlayOneShot(deathClip, deathVolume);
             CameraFollow2D.Instance?.Shake(deathShakeDuration, deathShakeMagnitude);
         }
 
-        private void PlayRandom(AudioClip[] clips, float pitchVariation)
+        private void PlayRandom(AudioClip[] clips, float pitchVariation, float volume)
         {
             if (clips == null || clips.Length == 0) return;
 
             _source.pitch = 1f + Random.Range(-pitchVariation, pitchVariation);
-            _source.PlayOneShot(clips[Random.Range(0, clips.Length)]);
+            _source.PlayOneShot(clips[Random.Range(0, clips.Length)], volume);
             _source.pitch = 1f;
         }
 
-        private void PlayOneShot(AudioClip clip)
+        // O volume vive aqui, por som, e não no AudioSource: a mesma fonte toca passo,
+        // pulo, dano e morte, então abaixar a fonte para o passo não estourar deixava
+        // dano e morte quase inaudíveis — o que aparecia como "som baixo" no build.
+        private void PlayOneShot(AudioClip clip, float volume)
         {
             if (clip == null) return;
             _source.pitch = 1f;
-            _source.PlayOneShot(clip);
+            _source.PlayOneShot(clip, volume);
         }
     }
 }

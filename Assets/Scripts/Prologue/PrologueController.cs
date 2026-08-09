@@ -98,8 +98,8 @@ namespace Warana.Prologue
             ("Piatã... levante-se.", 1.0f),
             ("A escuridão despertou.", 0.6f),
             ("Jurupari enviou seus servos para impedir sua iniciação.", 0.6f),
-            ("Mas você foi escolhido.", 0.6f),
-            ("Proteja Waraná. Proteja a floresta.", 1.2f),
+            ("Mas você é o escolhido.", 1.0f),
+            ("Proteja a floresta, juntos conseguiremos !", 1.2f),
         };
 
         private int _forwardSign = 1;

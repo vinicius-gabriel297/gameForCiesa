@@ -50,6 +50,13 @@ namespace Warana.Enemies
         [Tooltip("Profundidade da busca por chão à frente. Maior = aceita degraus mais fundos.")]
         [SerializeField] private float ledgeProbeDepth = 0.5f;
 
+        [Header("Travamento")]
+        [Tooltip("Tempo empurrando sem sair do lugar até se dar por preso. 0 = desliga a checagem.")]
+        [SerializeField] private float stuckTime = 0.3f;
+
+        [Tooltip("Abaixo desta velocidade, andar não conta como sair do lugar.")]
+        [SerializeField] private float stuckSpeed = 0.15f;
+
         [Header("Debug")]
         [SerializeField] private bool drawGizmos = true;
 
@@ -58,6 +65,7 @@ namespace Warana.Enemies
         private int _facing = 1;
         private float _targetSpeed;
         private float _knockbackTimeLeft;
+        private float _stuckFor;
 
         /// <summary>-1 olhando para a esquerda, +1 para a direita.</summary>
         public int FacingDirection => _facing;
@@ -85,8 +93,11 @@ namespace Warana.Enemies
                 _knockbackTimeLeft -= Time.fixedDeltaTime;
                 ApplyGravity();
                 _targetSpeed = 0f;
+                _stuckFor = 0f;
                 return;
             }
+
+            TrackStuck();
 
             ApplyHorizontal();
             ApplyGravity();
@@ -129,7 +140,14 @@ namespace Warana.Enemies
         {
             if (direction == 0) return;
 
-            _facing = direction > 0 ? 1 : -1;
+            int wanted = direction > 0 ? 1 : -1;
+            if (wanted == _facing) return;
+
+            // Virar é a saída para estar preso: o obstáculo que travava ficou para
+            // trás, então a contagem recomeça do zero. Sem isso o inimigo nasceria
+            // preso na direção nova e daria meia-volta no frame seguinte, oscilando.
+            _facing = wanted;
+            ClearStuck();
         }
 
         public void Flip() => SetFacing(-_facing);
@@ -166,8 +184,40 @@ namespace Warana.Enemies
         public bool HasGroundAhead =>
             Physics2D.Raycast(LedgeProbeOrigin, Vector2.down, ledgeProbeDepth, groundLayer);
 
-        /// <summary>Parede à frente ou fim do chão: os dois motivos para dar meia-volta.</summary>
-        public bool IsBlockedAhead => HasWallAhead || !HasGroundAhead;
+        /// <summary>
+        /// True quando o inimigo pediu para andar e não saiu do lugar por tempo demais.
+        ///
+        /// As sondas de parede e de beirada são raios finos, e só enxergam o que passa
+        /// exatamente por onde elas apontam: um degrau mais baixo que
+        /// <see cref="wallProbeHeight"/>, a quina de um tile em diagonal ou o ombro de
+        /// outro inimigo bloqueiam o corpo sem aparecer para nenhuma das duas. Quando
+        /// isso acontece, a IA continua mandando andar, a velocidade fica em zero, e o
+        /// inimigo passa o resto da fase encarando o obstáculo em pose de Idle.
+        ///
+        /// Medir o próprio deslocamento fecha esse buraco sem depender da geometria:
+        /// se o pedido de andar não vira movimento, ele está preso, seja qual for o motivo.
+        /// </summary>
+        public bool IsStuck => stuckTime > 0f && _stuckFor >= stuckTime;
+
+        /// <summary>Zera a contagem de preso. Chamado sozinho ao virar de lado.</summary>
+        public void ClearStuck() => _stuckFor = 0f;
+
+        private void TrackStuck()
+        {
+            bool walking = !Mathf.Approximately(_targetSpeed, 0f);
+            bool moving = Mathf.Abs(_rb.linearVelocity.x) >= stuckSpeed;
+
+            if (!walking || moving)
+            {
+                _stuckFor = 0f;
+                return;
+            }
+
+            _stuckFor += Time.fixedDeltaTime;
+        }
+
+        /// <summary>Parede, fim do chão ou corpo travado: os motivos para dar meia-volta.</summary>
+        public bool IsBlockedAhead => HasWallAhead || !HasGroundAhead || IsStuck;
 
         private Vector2 WallProbeOrigin => (Vector2)transform.position + Vector2.up * wallProbeHeight;
 

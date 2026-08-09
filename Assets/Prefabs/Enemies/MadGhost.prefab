@@ -369,6 +369,8 @@ MonoBehaviour:
   wallProbeDistance: 0.22
   ledgeProbeAhead: 0.32
   ledgeProbeDepth: 0.5
+  stuckTime: 0.3
+  stuckSpeed: 0.15
   drawGizmos: 1
 --- !u!114 &8944029175319977305
 MonoBehaviour:
@@ -464,11 +466,11 @@ AudioSource:
   m_GameObject: {fileID: 7676297819460473525}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3693474166785393201, guid: 7b42f17ae4eb8824abd55b4f6388d61c, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.8
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -566,6 +568,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Warana.Enemies.MadGhostAudio
   attackClip: {fileID: 8300000, guid: 5e9c962f52718354aa6c95603332be73, type: 3}
   deathClip: {fileID: 8300000, guid: 9569b9ebcc7168c429fcd976f1dde099, type: 3}
+  attackVolume: 0.85
+  deathVolume: 0.9
   hitShakeDuration: 0.06
   hitShakeMagnitude: 0.04
   deathShakeDuration: 0.12
