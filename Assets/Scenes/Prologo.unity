@@ -79727,6 +79727,8 @@ MonoBehaviour:
   lineHoldFallback: 2.2
   nextSceneName: Mapa_01
   finalFadeDuration: 2
+  skipFont: {fileID: 11400000, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
+  skipFadeDuration: 0.6
 --- !u!320 &399890624
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -90340,8 +90342,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
+  m_sharedMaterial: {fileID: 5378827331731930368, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -106876,9 +106878,9 @@ MonoBehaviour:
   lookAheadDistance: 1.5
   lookAheadSmoothTime: 0.2
   shakeStrength: 1
-  useBounds: 0
-  boundsMin: {x: 0, y: 0}
-  boundsMax: {x: 0, y: 0}
+  useBounds: 1
+  boundsMin: {x: -55.96, y: -4.5}
+  boundsMax: {x: 44.29, y: 20}
 --- !u!114 &1816444026
 MonoBehaviour:
   m_ObjectHideFlags: 0

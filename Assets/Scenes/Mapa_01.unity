@@ -244,7 +244,7 @@ MonoBehaviour:
   fadeDuration: 1
   buttonSprite: {fileID: 21300000, guid: a454050719005b444b59a84eaafba779, type: 3}
   panelSprite: {fileID: 21300000, guid: e8d8a9b626da0fb45bc39380d2e13b58, type: 3}
-  font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  font: {fileID: 11400000, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
   overlayColor: {r: 0, g: 0, b: 0, a: 0.72}
   labelColor: {r: 0.027, g: 0, b: 0, a: 1}
 --- !u!4 &50784005
@@ -152101,8 +152101,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
+  m_sharedMaterial: {fileID: 5378827331731930368, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -153361,8 +153361,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
+  m_sharedMaterial: {fileID: 5378827331731930368, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -165283,7 +165283,7 @@ Transform:
   m_GameObject: {fileID: 1529104704}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 29, y: 0, z: 0}
+  m_LocalPosition: {x: 29.04, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -175158,7 +175158,7 @@ MonoBehaviour:
   controlsText: {fileID: 682296407}
   controlsHold: 6
   textFadeDuration: 0.4
-  skipFont: {fileID: 0}
+  skipFont: {fileID: 11400000, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
 --- !u!82 &1743486942
 AudioSource:
   m_ObjectHideFlags: 0
@@ -175732,7 +175732,7 @@ MonoBehaviour:
   victoryMessage: A floresta volta a respirar
   messageFadeDuration: 1
   messageHold: 3
-  messageFont: {fileID: 0}
+  messageFont: {fileID: 11400000, guid: 3ecfb443f18e1e24e9196073a2245e62, type: 2}
 --- !u!1 &1847777330
 GameObject:
   m_ObjectHideFlags: 0

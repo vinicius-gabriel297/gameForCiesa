@@ -97,8 +97,48 @@ namespace Warana.UI
             tmp.text = GameControls.SkipHint;
             tmp.fontSize = 28f;
             tmp.alignment = TextAlignmentOptions.Right;
-            tmp.color = new Color(1f, 1f, 1f, 0.55f);
+            tmp.color = new Color(1f, 1f, 1f, SkipPromptPulse.MaxAlpha);
             tmp.raycastTarget = false;
+
+            labelGO.AddComponent<SkipPromptPulse>();
+        }
+    }
+
+    /// <summary>
+    /// Faz o aviso de pular respirar devagar.
+    ///
+    /// Parado no canto, ele se confunde com a interface e some da atenção de quem está
+    /// olhando para a cena; um brilho que vai e volta é percebido pela visão periférica
+    /// sem exigir que o jogador desvie o olhar do que importa.
+    ///
+    /// <para>Lento e sem apagar de todo: o ciclo é longo e a opacidade nunca chega a
+    /// zero, para o aviso pulsar em vez de piscar — piscada rápida puxa o olho para
+    /// fora da cutscene, que é justamente o que ela não deveria fazer.</para>
+    /// </summary>
+    [DisallowMultipleComponent]
+    public class SkipPromptPulse : MonoBehaviour
+    {
+        public const float MinAlpha = 0.28f;
+        public const float MaxAlpha = 0.75f;
+
+        /// <summary>Segundos de um ciclo completo (claro → apagado → claro).</summary>
+        private const float Period = 2.2f;
+
+        private TMP_Text _text;
+
+        private void Awake() => _text = GetComponent<TMP_Text>();
+
+        private void Update()
+        {
+            if (_text == null) return;
+
+            // unscaledTime porque o menu de pausa zera o timeScale, e um aviso congelado
+            // no meio do fade pareceria a tela ter travado.
+            float wave = (Mathf.Sin(Time.unscaledTime * Mathf.PI * 2f / Period) + 1f) * 0.5f;
+
+            Color color = _text.color;
+            color.a = Mathf.Lerp(MinAlpha, MaxAlpha, wave);
+            _text.color = color;
         }
     }
 }

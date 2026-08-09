@@ -193,6 +193,10 @@ namespace Warana.UI
 
             _group = canvasGO.GetComponent<CanvasGroup>();
 
+            // Mesma marca do menu principal: no controle ela é o que diz onde se está,
+            // e o jogador não deveria ter que reaprender isso ao abrir a pausa.
+            canvasGO.AddComponent<MenuSelectionMarker>();
+
             var overlay = CreateImage("Overlay", canvasGO.transform, null, overlayColor);
             Stretch((RectTransform)overlay.transform);
 

@@ -30,14 +30,21 @@ namespace Warana.UI
             }
         }
 
-        /// <summary>Nomes de botão seguem a nomenclatura do controle de Xbox.</summary>
+        /// <summary>
+        /// Nomes de botão seguem a nomenclatura do controle de Xbox.
+        ///
+        /// <para>Descrições curtas de propósito: a linha mais longa desta tabela é o que
+        /// decide o corpo da fonte no painel de controles, porque o texto se ajusta para
+        /// caber. "Botão esquerdo do mouse" encolhia a lista inteira a ponto de a fonte
+        /// bitmap virar borrão.</para>
+        /// </summary>
         public static readonly Binding[] All =
         {
-            new Binding("Mover",     "A / D  ou  ← →",                  "Analógico esquerdo ou direcional"),
-            new Binding("Pular",     "Espaço",                          "A"),
-            new Binding("Atacar",    "Botão esquerdo do mouse  ou  Z",  "X"),
-            new Binding("Canalizar", "Botão direito do mouse  ou  X",   "Gatilho direito"),
-            new Binding("Pausar",    "Esc",                             "Start"),
+            new Binding("Mover",     "A / D  ou  ← →",         "Analógico ou direcional"),
+            new Binding("Pular",     "Espaço",                 "A"),
+            new Binding("Atacar",    "Clique esquerdo  ou  Z", "X"),
+            new Binding("Canalizar", "Clique direito  ou  X",  "Gatilho direito"),
+            new Binding("Pausar",    "Esc",                    "Start"),
         };
 
         /// <summary>Texto mostrado quando dá para pular uma cena dirigida.</summary>
@@ -65,17 +72,21 @@ namespace Warana.UI
         /// por comando em vez de três: a lista precisa caber no painel sem rolagem, e um
         /// cabeçalho único diz o que é cada coluna melhor do que repetir "Teclado" e
         /// "Controle" cinco vezes.
+        ///
+        /// <para>Sem <c>&lt;size&gt;</c> e sem <c>&lt;b&gt;</c>: a fonte da interface é
+        /// bitmap, e tanto uma porcentagem de corpo quanto o negrito sintetizado pelo TMP
+        /// caem em frações de pixel — a letra chega borrada, que é justamente o que
+        /// trocar a fonte veio resolver. O nome do comando se destaca em caixa alta.</para>
         /// </summary>
         public static string Panel()
         {
             var sb = new StringBuilder();
-            sb.Append("<size=65%>Teclado   ·   Controle</size>\n\n");
+            sb.Append("Teclado   ·   Controle\n\n");
 
             foreach (Binding b in All)
             {
-                sb.Append("<b>").Append(b.Action).Append("</b>\n")
-                  .Append("<size=80%>").Append(b.Keyboard)
-                  .Append("   ·   ").Append(b.Gamepad).Append("</size>\n\n");
+                sb.Append(b.Action.ToUpperInvariant()).Append('\n')
+                  .Append(b.Keyboard).Append("   ·   ").Append(b.Gamepad).Append("\n\n");
             }
 
             return sb.ToString().TrimEnd('\n');
