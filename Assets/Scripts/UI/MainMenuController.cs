@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Warana.Audio;
@@ -26,6 +27,10 @@ namespace Warana.UI
         [SerializeField] private Button controlsButton;
         [SerializeField] private Button quitButton;
         [SerializeField] private Button backButton;
+
+        [Tooltip("Grupo dos botões do menu. Fica inerte enquanto um painel está aberto, " +
+                 "senão o direcional do controle sai do painel para os botões atrás dele.")]
+        [SerializeField] private CanvasGroup buttonsGroup;
 
         [Header("Opções")]
         [SerializeField] private GameObject optionsPanel;
@@ -74,6 +79,53 @@ namespace Warana.UI
             if (controlsPanel != null) controlsPanel.SetActive(false);
         }
 
+        private void Start()
+        {
+            // Sem uma seleção inicial, quem abre o jogo no controle não tem por onde
+            // começar: o direcional não mexe em nada até um clique de mouse dar foco a
+            // alguma coisa. Vai no Start, e não no Awake, porque o EventSystem também
+            // precisa ter acordado.
+            Select(startButton);
+        }
+
+        /// <summary>
+        /// Devolve o foco quando ele se perde. Um clique do mouse fora de qualquer botão
+        /// zera a seleção do EventSystem, e a partir daí o controle fica morto até o
+        /// jogador voltar ao mouse — que é justamente o que ele não quer fazer.
+        /// </summary>
+        private void Update()
+        {
+            EventSystem events = EventSystem.current;
+            if (events == null) return;
+
+            if (events.currentSelectedGameObject != null)
+            {
+                _lastSelected = events.currentSelectedGameObject;
+                return;
+            }
+
+            // Só devolve para algo que ainda aceite foco: com um painel aberto os botões
+            // de trás estão inertes, e insistir neles deixaria o controle preso num alvo
+            // que não responde.
+            if (_lastSelected == null || !_lastSelected.activeInHierarchy) return;
+
+            var selectable = _lastSelected.GetComponent<Selectable>();
+            if (selectable != null && !selectable.IsInteractable()) return;
+
+            events.SetSelectedGameObject(_lastSelected);
+        }
+
+        /// <summary>Onde o foco estava, para devolvê-lo se ele se perder.</summary>
+        private GameObject _lastSelected;
+
+        private void Select(Selectable target)
+        {
+            if (target == null || EventSystem.current == null) return;
+
+            EventSystem.current.SetSelectedGameObject(target.gameObject);
+            _lastSelected = target.gameObject;
+        }
+
         private static void WireTargetGraphic(Button button)
         {
             if (button == null || button.targetGraphic != null) return;
@@ -85,16 +137,28 @@ namespace Warana.UI
         // Os dois painéis ocupam o mesmo lugar da tela, então abrir um fecha o outro —
         // senão eles se sobrepõem e o de baixo continua clicável.
 
+        // Abrir um painel leva o foco junto e fechar devolve ao botão que o abriu:
+        // no controle, um painel aberto com a seleção ainda lá atrás faz o direcional
+        // mexer em botões escondidos atrás dele.
+
         public void OpenOptions()
         {
             if (controlsPanel != null) controlsPanel.SetActive(false);
             if (optionsPanel != null) optionsPanel.SetActive(true);
+
+            SetMenuButtonsActive(false);
+
+            // O slider antes do Voltar: é o que a tela existe para ajustar.
+            Select(volumeSlider != null ? (Selectable)volumeSlider : backButton);
         }
 
         public void CloseOptions()
         {
             MasterVolume.Flush();
             if (optionsPanel != null) optionsPanel.SetActive(false);
+
+            SetMenuButtonsActive(true);
+            Select(optionsButton);
         }
 
         public void OpenControls()
@@ -103,11 +167,30 @@ namespace Warana.UI
             // volume, e o jogador perderia o ajuste que acabou de fazer.
             if (optionsPanel != null && optionsPanel.activeSelf) CloseOptions();
             if (controlsPanel != null) controlsPanel.SetActive(true);
+
+            SetMenuButtonsActive(false);
+            Select(controlsBackButton);
         }
 
         public void CloseControls()
         {
             if (controlsPanel != null) controlsPanel.SetActive(false);
+
+            SetMenuButtonsActive(true);
+            Select(controlsButton);
+        }
+
+        /// <summary>
+        /// Liga e desliga os botões de fundo. Sem isso o direcional atravessa o painel:
+        /// descer do slider de volume levava o foco ao Iniciar, que está escondido atrás
+        /// dele — e o jogador acionava no escuro um botão que não estava vendo.
+        /// </summary>
+        private void SetMenuButtonsActive(bool active)
+        {
+            if (buttonsGroup == null) return;
+
+            buttonsGroup.interactable = active;
+            buttonsGroup.blocksRaycasts = active;
         }
 
         public void SetMasterVolume(float value) => MasterVolume.Value = value;
