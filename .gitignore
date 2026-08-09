@@ -78,6 +78,10 @@ sysinfo.txt
 # Mono auto generated files
 mono_crash.*
 
+# Screenshots de conferência tiradas pelo editor
+/[Aa]ssets/[Ss]creenshots/
+/[Aa]ssets/[Ss]creenshots.meta
+
 # Builds
 /Build_Jam/
 /Wanará/
