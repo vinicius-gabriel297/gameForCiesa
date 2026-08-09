@@ -88,6 +88,13 @@ namespace Warana.UI
         private void Update()
         {
             if (_leaving) return;
+
+            // Esc é a mesma tecla que pula a abertura da fase. Enquanto ela estiver
+            // rodando o pedido é dela, senão um toque só pularia a cutscene e abriria
+            // a pausa por cima dela no mesmo frame. Já pausado, destravar continua
+            // valendo — do contrário a pausa poderia prender o jogador.
+            if (!IsPaused && SkipControl.IsSequenceRunning) return;
+
             if (_pauseAction != null && _pauseAction.WasPressedThisFrame()) Toggle();
         }
 

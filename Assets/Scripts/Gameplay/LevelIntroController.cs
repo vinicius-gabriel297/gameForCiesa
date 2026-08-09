@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using Warana.Player;
+using Warana.UI;
 
 namespace Warana.Gameplay
 {
@@ -51,16 +52,20 @@ namespace Warana.Gameplay
 
         [SerializeField] private TMP_Text controlsText;
 
-        [TextArea]
-        [SerializeField]
-        private string controlsLine =
-            "Mover:  A / D  ou  ← →\nPular:  Espaço\nCanalizar:  Botão direito do mouse";
-
         [Tooltip("Quanto tempo os comandos ficam na tela antes de sumirem.")]
         [SerializeField] private float controlsHold = 6f;
 
         [Header("Transições")]
         [SerializeField] private float textFadeDuration = 0.4f;
+
+        [Header("Pular")]
+        [Tooltip("Fonte do aviso de pular, no canto da tela.")]
+        [SerializeField] private TMP_FontAsset skipFont;
+
+        private SkipControl _skip;
+
+        /// <summary>Pedido de pulo ainda não consumido pela etapa em andamento.</summary>
+        private bool _skipRequested;
 
         private IEnumerator Start()
         {
@@ -73,6 +78,8 @@ namespace Warana.Gameplay
             if (playerController != null) playerController.FreezeControl(true);
             if (playerInput != null) playerInput.SetChannelLocked(true);
 
+            _skip = new SkipControl(skipFont);
+
             yield return Fade(fadeGroup, 0f, fadeInDuration);
 
             yield return SpeakWaranaLine();
@@ -81,7 +88,30 @@ namespace Warana.Gameplay
             if (playerController != null) playerController.FreezeControl(false);
             if (playerInput != null) playerInput.SetChannelLocked(false);
 
+            // Um toque pula a abertura inteira, mas os comandos continuam aparecendo:
+            // quem pulou por reflexo não fica sem saber como jogar. Daqui em diante o
+            // pedido volta a valer, agora para dispensar o quadro de comandos.
+            _skipRequested = false;
+
             yield return ShowControls();
+
+            // A partir daqui não há mais nada para pular, e o Esc precisa voltar a ser
+            // do menu de pausa — que fica bloqueado enquanto este objeto existir.
+            _skip.Dispose();
+            _skip = null;
+        }
+
+        private void Update()
+        {
+            if (_skip != null && _skip.Requested) _skipRequested = true;
+        }
+
+        private void OnDestroy()
+        {
+            // Sair da cena no meio da abertura deixaria a contagem de sequências
+            // dirigidas presa em aberto, e o menu de pausa nunca mais abriria.
+            _skip?.Dispose();
+            _skip = null;
         }
 
         private IEnumerator SpeakWaranaLine()
@@ -99,7 +129,10 @@ namespace Warana.Gameplay
             yield return Fade(dialogueGroup, 1f, textFadeDuration);
 
             float hold = Mathf.Max(lineHold, voiceClip != null ? voiceClip.length : 0f);
-            yield return new WaitForSeconds(hold);
+            yield return Wait(hold);
+
+            // A voz continuaria tocando por cima do jogo depois do texto sumir.
+            if (_skipRequested && voiceSource != null && voiceSource.isPlaying) voiceSource.Stop();
 
             yield return Fade(dialogueGroup, 0f, textFadeDuration);
         }
@@ -108,13 +141,31 @@ namespace Warana.Gameplay
         {
             if (controlsGroup == null || controlsText == null) yield break;
 
-            controlsText.text = controlsLine;
+            // Fonte única: a lista vive em GameControls, junto com a do menu e a da
+            // página da loja, porque escrita à mão aqui ela já tinha ficado para trás.
+            controlsText.text = GameControls.Overlay();
 
             yield return Fade(controlsGroup, 1f, textFadeDuration);
-            yield return new WaitForSeconds(controlsHold);
+            yield return Wait(controlsHold);
             yield return Fade(controlsGroup, 0f, textFadeDuration);
         }
 
+        /// <summary>Espera que termina antes se o jogador pedir para pular.</summary>
+        private IEnumerator Wait(float seconds)
+        {
+            float elapsed = 0f;
+
+            while (elapsed < seconds && !_skipRequested)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        /// <summary>
+        /// Fade que salta direto para o destino quando o jogador pede para pular — é o
+        /// que faz o pedido valer já no fade de entrada, e não só depois dele.
+        /// </summary>
         private IEnumerator Fade(CanvasGroup group, float target, float duration)
         {
             if (group == null) yield break;
@@ -124,6 +175,8 @@ namespace Warana.Gameplay
 
             while (elapsed < duration)
             {
+                if (_skipRequested) break;
+
                 elapsed += Time.deltaTime;
                 group.alpha = Mathf.Lerp(from, target, elapsed / duration);
                 yield return null;

@@ -6,6 +6,7 @@ using TMPro;
 using Warana.Companion;
 using Warana.Enemies;
 using Warana.Player;
+using Warana.UI;
 
 namespace Warana.Prologue
 {
@@ -91,6 +92,14 @@ namespace Warana.Prologue
         [SerializeField] private string nextSceneName = "Mapa_01";
         [SerializeField] private float finalFadeDuration = 2f;
 
+        [Header("Pular")]
+        [Tooltip("Fonte do aviso de pular, no canto da tela.")]
+        [SerializeField] private TMP_FontAsset skipFont;
+
+        [Tooltip("Fade de saída quando o jogador pula o prólogo. Curto de propósito: " +
+                 "quem pulou está com pressa.")]
+        [SerializeField] private float skipFadeDuration = 0.6f;
+
         /// <summary>Fala e a pausa depois dela. As rubricas entre parênteses do roteiro
         /// (olhar, aproximar-se) viram só tempo — sem personagem animável para elas.</summary>
         private static readonly (string Line, float Pause)[] AmbushDialogue =
@@ -104,8 +113,13 @@ namespace Warana.Prologue
 
         private int _forwardSign = 1;
 
+        private SkipControl _skip;
+        private bool _skipping;
+
         private IEnumerator Start()
         {
+            _skip = new SkipControl(skipFont);
+
             playerAnimator.WalkMode = true;
             playerController.FreezeControl(true);
             fadeGroup.alpha = 1f;
@@ -134,6 +148,52 @@ namespace Warana.Prologue
             playerController.FreezeControl(true);
 
             yield return RunAmbushSequence();
+        }
+
+        private void Update()
+        {
+            if (_skipping || _skip == null || !_skip.Requested) return;
+
+            _skipping = true;
+
+            // O prólogo é uma cena dirigida do começo ao fim: não há um "próximo trecho"
+            // para avançar, então pular é sair dela. Interromper o roteiro no meio é
+            // seguro justamente porque nada aqui altera estado que o Mapa 01 leia —
+            // o poder que Waraná entrega é narrativo, não um flag de progressão.
+            StopAllCoroutines();
+            StartCoroutine(SkipToNextScene());
+        }
+
+        private void OnDestroy()
+        {
+            // Sem isso a contagem de sequências dirigidas ficaria aberta para sempre.
+            _skip?.Dispose();
+            _skip = null;
+        }
+
+        /// <summary>
+        /// Corta tudo o que o roteiro deixou no ar — voz, efeito, Timeline e os textos —
+        /// antes de escurecer. Sem isso a narração seguiria tocando por cima do Mapa 01,
+        /// porque um AudioSource não para sozinho na troca de cena dentro do mesmo frame.
+        /// </summary>
+        private IEnumerator SkipToNextScene()
+        {
+            if (narrationSource != null) narrationSource.Stop();
+            if (sfxSource != null) sfxSource.Stop();
+            if (cattoAudioSource != null) cattoAudioSource.Stop();
+
+            if (treeCutsceneDirector != null && treeCutsceneDirector.state == PlayState.Playing)
+                treeCutsceneDirector.Stop();
+
+            if (dialogueGroup != null) dialogueGroup.alpha = 0f;
+            if (flashGroup != null) flashGroup.alpha = 0f;
+
+            _skip?.Dispose();
+            _skip = null;
+
+            yield return FadeTo(fadeGroup, 1f, skipFadeDuration);
+
+            SceneManager.LoadScene(nextSceneName);
         }
 
         private IEnumerator RunNarrationAndWalk()
