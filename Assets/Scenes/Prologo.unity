@@ -79533,7 +79533,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 45, y: -0.98, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1164118976}
@@ -79686,7 +79686,7 @@ MonoBehaviour:
   playerChannel: {fileID: 1266514617}
   playerAnimator: {fileID: 1266514610}
   fadeGroup: {fileID: 1092983070}
-  fadeInDuration: 6
+  fadeInDuration: 4
   narrationSource: {fileID: 1788038141}
   narrationClips:
   - {fileID: 8300000, guid: 675cac6ac1ab2634e97d359fd1eced5e, type: 3}
@@ -79701,10 +79701,12 @@ MonoBehaviour:
   - "Na noite de sua inicia\xE7\xE3o... o jovem Piat\xE3 percorre sozinho o caminho
     at\xE9 a \xC1rvore Ancestral, onde receber\xE1 a b\xEAn\xE7\xE3o do Guardi\xE3o..."
   - "Mas, naquela noite... algu\xE9m j\xE1 o aguardava."
+  narrationGap: 1.2
   arrivalPoint: {fileID: 1348040004}
   nearTreeDistance: 5
   treeCutsceneDirector: {fileID: 399890624}
   catto: {fileID: 354994986}
+  cattoEntryDelay: 15
   cattoAudioSource: {fileID: 354994985}
   meowClip: {fileID: 0}
   cattoSpawnPoint: {fileID: 910299533}
@@ -79712,6 +79714,13 @@ MonoBehaviour:
   cattoWalkSpeed: 1
   idleSitHold: 2
   deathPause: 2
+  boltPrefab: {fileID: 5627696518775099638, guid: 6839a8d6998e86d4282063ffdacb0c15, type: 3}
+  boltSkyHeight: 7
+  boltThickness: 0.22
+  boltLengthCalibration: 0.72
+  boltLifetime: 1.2
+  boltSortingOrder: 30
+  boltToFlashDelay: 0.08
   flashGroup: {fileID: 1558769793}
   sfxSource: {fileID: 1892793564}
   zapClip: {fileID: 8300000, guid: 5a9bb0e555e58384180555f82f97e00f, type: 3}
@@ -96653,7 +96662,7 @@ Transform:
   m_GameObject: {fileID: 1529104704}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 29, y: 0, z: 0}
+  m_LocalPosition: {x: 29.04, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
