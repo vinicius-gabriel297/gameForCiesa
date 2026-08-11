@@ -30,6 +30,30 @@ namespace Warana.Player
 
         [Header("Ações")]
         [SerializeField] private AudioClip jumpClip;
+
+        [Tooltip("Sopro da lança cortando o ar, no início da estocada.")]
+        [SerializeField] private AudioClip attackClip;
+
+        [Tooltip("Esforço do Piatã na estocada. Camada por cima do sopro, não substituto.")]
+        [SerializeField] private AudioClip attackVoiceClip;
+
+        // Grunhido em toda estocada cansa rápido — o jogador ataca dezenas de vezes por
+        // sala. Tocar só em parte dos golpes, com pitch variado, mantém a voz como
+        // acento do esforço em vez de tique da animação.
+        [Tooltip("Chance de o esforço sair em cada estocada. 1 = sempre.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float attackVoiceChance = 0.6f;
+
+        [Tooltip("Variação de pitch da voz, para dois grunhidos seguidos não soarem iguais.")]
+        [Range(0f, 0.3f)]
+        [SerializeField] private float attackVoicePitchVariation = 0.07f;
+
+        [Tooltip("Silêncio mínimo entre dois esforços, em segundos, mesmo com a chance alta.")]
+        [SerializeField] private float attackVoiceMinInterval = 0.9f;
+
+        [Tooltip("Impacto da ponta no inimigo. Toca por cima do sopro, não no lugar dele.")]
+        [SerializeField] private AudioClip attackHitClip;
+
         [SerializeField] private AudioClip damageClip;
         [SerializeField] private AudioClip deathClip;
 
@@ -37,6 +61,16 @@ namespace Warana.Player
         [Tooltip("Ganho de cada ação sobre o volume do AudioSource, que fica em 1.")]
         [Range(0f, 1f)]
         [SerializeField] private float jumpVolume = 0.7f;
+
+        [Range(0f, 1f)]
+        [SerializeField] private float attackVolume = 0.6f;
+
+        [Tooltip("A voz fica abaixo do sopro: ela acompanha o golpe, quem marca o golpe é a lança.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float attackVoiceVolume = 0.45f;
+
+        [Range(0f, 1f)]
+        [SerializeField] private float attackHitVolume = 0.8f;
 
         [Range(0f, 1f)]
         [SerializeField] private float damageVolume = 0.9f;
@@ -53,21 +87,56 @@ namespace Warana.Player
         [SerializeField] private float deathShakeDuration = 0.25f;
         [SerializeField] private float deathShakeMagnitude = 0.2f;
 
+        [Tooltip("Tremor ao acertar a lança. Bem curto: é pontuação do acerto, não susto.")]
+        [SerializeField] private float attackHitShakeDuration = 0.07f;
+        [SerializeField] private float attackHitShakeMagnitude = 0.05f;
+
         private PlayerController2D _controller;
+        private PlayerAttack _attack;
         private Health _health;
         private AudioSource _source;
+        private AudioSource _voiceSource;
         private float _stepTimer;
+        private float _lastAttackVoiceTime = -999f;
 
         private void Awake()
         {
             _controller = GetComponent<PlayerController2D>();
+            _attack = GetComponent<PlayerAttack>();
             _health = GetComponent<Health>();
             _source = GetComponent<AudioSource>();
+            _voiceSource = CreateVoiceSource();
+        }
+
+        /// <summary>
+        /// Fonte separada só para a voz. O pitch do <see cref="AudioSource"/> vale para
+        /// todos os one-shots ainda tocando nele, então variar o pitch na fonte comum
+        /// desafinaria o sopro da lança que está no ar — e devolver o pitch a 1 logo em
+        /// seguida cancelaria a variação. Com fonte própria, a voz varia sozinha e
+        /// continua misturando com o sopro, que é o efeito pedido.
+        /// </summary>
+        private AudioSource CreateVoiceSource()
+        {
+            var voice = gameObject.AddComponent<AudioSource>();
+            voice.playOnAwake = false;
+            voice.loop = false;
+            voice.spatialBlend = _source.spatialBlend;
+            voice.outputAudioMixerGroup = _source.outputAudioMixerGroup;
+            voice.rolloffMode = _source.rolloffMode;
+            voice.minDistance = _source.minDistance;
+            voice.maxDistance = _source.maxDistance;
+            return voice;
         }
 
         private void OnEnable()
         {
             _controller.Jumped += PlayJump;
+
+            if (_attack != null)
+            {
+                _attack.Started += PlayAttack;
+                _attack.Hit += OnAttackHit;
+            }
 
             if (_health == null) return;
             _health.Damaged += OnDamaged;
@@ -77,6 +146,12 @@ namespace Warana.Player
         private void OnDisable()
         {
             _controller.Jumped -= PlayJump;
+
+            if (_attack != null)
+            {
+                _attack.Started -= PlayAttack;
+                _attack.Hit -= OnAttackHit;
+            }
 
             if (_health == null) return;
             _health.Damaged -= OnDamaged;
@@ -105,6 +180,31 @@ namespace Warana.Player
         }
 
         private void PlayJump() => PlayOneShot(jumpClip, jumpVolume);
+
+        private void PlayAttack()
+        {
+            PlayOneShot(attackClip, attackVolume);
+            PlayAttackVoice();
+        }
+
+        /// <summary>Esforço do Piatã, sobreposto ao sopro da lança e não no lugar dele.</summary>
+        private void PlayAttackVoice()
+        {
+            if (attackVoiceClip == null) return;
+            if (Time.time - _lastAttackVoiceTime < attackVoiceMinInterval) return;
+            if (Random.value > attackVoiceChance) return;
+
+            _lastAttackVoiceTime = Time.time;
+
+            _voiceSource.pitch = 1f + Random.Range(-attackVoicePitchVariation, attackVoicePitchVariation);
+            _voiceSource.PlayOneShot(attackVoiceClip, attackVoiceVolume);
+        }
+
+        private void OnAttackHit(Vector2 point)
+        {
+            PlayOneShot(attackHitClip, attackHitVolume);
+            CameraFollow2D.Instance?.Shake(attackHitShakeDuration, attackHitShakeMagnitude);
+        }
 
         private void OnDamaged(float amount, Vector2 direction)
         {

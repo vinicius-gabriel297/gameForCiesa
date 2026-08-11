@@ -51,6 +51,20 @@ namespace Warana.UI
         public const string SkipHint = "Esc  —  pular";
 
         /// <summary>
+        /// Um comando só, para quando a tela precisa lembrar de um verbo específico em
+        /// vez da lista inteira — o convite da árvore sagrada pede Canalizar, e mais
+        /// nada. Escrever a tecla à mão ali seria a quarta cópia da mesma informação.
+        /// </summary>
+        public static string Prompt(string action)
+        {
+            foreach (Binding b in All)
+                if (b.Action == action)
+                    return b.Action + ":  " + b.Keyboard + "   ·   " + b.Gamepad;
+
+            return action;
+        }
+
+        /// <summary>
         /// Versão curta para a abertura da fase: só teclado, porque ali o texto divide
         /// a tela com o jogo já rodando e uma segunda coluna competiria com ele.
         /// </summary>

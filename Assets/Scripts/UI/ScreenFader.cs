@@ -86,9 +86,27 @@ namespace Warana.UI
             float messageHold = 3f,
             TMP_FontAsset font = null)
         {
+            FadeToBlackWithMessages(sceneName, new[] { message }, duration, messageFade, messageHold, font);
+        }
+
+        /// <summary>
+        /// Mesma coisa com vários cartões em sequência, um de cada vez sobre o preto.
+        ///
+        /// O epílogo da fase precisa de dois: um diz o que aconteceu com esta região,
+        /// o outro diz o que sobrou de floresta. Ditos na mesma tela eles viram
+        /// parágrafo; separados, cada um tem o tempo de assentar.
+        /// </summary>
+        public void FadeToBlackWithMessages(
+            string sceneName,
+            string[] messages,
+            float duration = -1f,
+            float messageFade = 1f,
+            float messageHold = 3f,
+            TMP_FontAsset font = null)
+        {
             StartCoroutine(FadeMessageAndLoad(
                 sceneName,
-                message,
+                messages,
                 duration > 0f ? duration : defaultFadeDuration,
                 messageFade,
                 messageHold,
@@ -96,17 +114,25 @@ namespace Warana.UI
         }
 
         private IEnumerator FadeMessageAndLoad(
-            string sceneName, string message, float duration, float messageFade, float messageHold, TMP_FontAsset font)
+            string sceneName, string[] messages, float duration, float messageFade, float messageHold, TMP_FontAsset font)
         {
             _canvasGroup.blocksRaycasts = true;
             EnsureMessage(font);
 
             yield return FadeAlpha(1f, duration);
 
-            _messageText.text = message;
-            yield return FadeGroup(_messageGroup, 1f, messageFade);
-            yield return new WaitForSeconds(messageHold);
-            yield return FadeGroup(_messageGroup, 0f, messageFade);
+            if (messages != null)
+            {
+                foreach (string message in messages)
+                {
+                    if (string.IsNullOrEmpty(message)) continue;
+
+                    _messageText.text = message;
+                    yield return FadeGroup(_messageGroup, 1f, messageFade);
+                    yield return new WaitForSeconds(messageHold);
+                    yield return FadeGroup(_messageGroup, 0f, messageFade);
+                }
+            }
 
             if (!string.IsNullOrEmpty(sceneName))
             {

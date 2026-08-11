@@ -306,46 +306,20 @@ namespace Warana.Combat
         // ------------------------------------------------------------------ VFX
 
         /// <summary>
-        /// Encaixa o prefab entre os dois pontos.
-        ///
-        /// A rotação alinha o eixo do raio com a direção do tiro, e a escala do
-        /// transform define só a espessura. O comprimento não vem da escala: o raio é
-        /// uma billboard esticada (Stretched Billboard), e o tamanho dela é o
-        /// startSize.y da partícula multiplicado pelo lengthScale do renderer —
-        /// escalar o transform engorda o raio sem encurtá-lo. Por isso o comprimento
-        /// é escrito direto na fonte, partícula por partícula.
+        /// O encaixe em si mora em <see cref="BoltVfx"/>: o Prólogo dispara este mesmo
+        /// raio na emboscada, e a conta do comprimento precisa ser uma só.
         /// </summary>
         private void SpawnBolt(Vector2 from, Vector2 to)
         {
-            if (boltPrefab == null) return;
-
-            Vector3 delta = (Vector3)(to - from);
-            float distance = delta.magnitude;
-            if (distance < 0.001f) return;
-
-            GameObject instance = Instantiate(boltPrefab, from, Quaternion.identity);
-
-            Vector3 direction = delta / distance;
-            instance.transform.rotation = Quaternion.FromToRotation(LocalAxis(boltAxis), direction);
-
-            float thickness = Mathf.Max(0.001f, boltThickness);
-            instance.transform.localScale = Vector3.one * thickness;
-
-            float wanted = distance * boltLengthCalibration;
-
-            foreach (ParticleSystem system in instance.GetComponentsInChildren<ParticleSystem>(true))
-            {
-                var renderer = system.GetComponent<ParticleSystemRenderer>();
-                if (renderer == null || renderer.renderMode != ParticleSystemRenderMode.Stretch) continue;
-
-                ParticleSystem.MainModule main = system.main;
-                main.startSizeYMultiplier = wanted / (Mathf.Max(0.001f, renderer.lengthScale) * thickness);
-            }
-
-            foreach (Renderer renderer in instance.GetComponentsInChildren<Renderer>(true))
-                renderer.sortingOrder = boltSortingOrder;
-
-            Destroy(instance, boltLifetime);
+            BoltVfx.Spawn(
+                boltPrefab,
+                from,
+                to,
+                LocalAxis(boltAxis),
+                boltThickness,
+                boltLengthCalibration,
+                boltSortingOrder,
+                boltLifetime);
         }
 
         private static Vector3 LocalAxis(BoltAxis axis)

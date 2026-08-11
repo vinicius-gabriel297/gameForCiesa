@@ -10,9 +10,9 @@ namespace Warana.Gameplay
     /// A abertura da fase: a tela clareia, Waraná diz o que está em jogo e só então o
     /// jogador ganha o controle, com os comandos escritos na tela.
     ///
-    /// A ordem não é decorativa. Entregar o controle antes da fala faria o jogador
-    /// andar por cima dela — e a frase de Waraná é a única coisa que explica por que
-    /// a floresta está daquele jeito. O lembrete de comandos vem *junto* com o
+    /// A ordem não é decorativa. Entregar o controle antes das falas faria o jogador
+    /// andar por cima delas — e elas são a única coisa que explica por que a floresta
+    /// está daquele jeito e para onde ele deve ir. O lembrete de comandos vem *junto* com o
     /// controle, e não antes, porque ler um comando que ainda não funciona não ensina
     /// nada; ele some sozinho logo depois, quando já virou músculo.
     /// </summary>
@@ -35,9 +35,25 @@ namespace Warana.Gameplay
 
         [SerializeField] private TMP_Text dialogueText;
 
+        /// <summary>
+        /// A primeira linha diz o estado da mata; a segunda diz para onde ir.
+        ///
+        /// <para>A segunda existe porque a fase termina numa árvore sagrada, e chegar
+        /// nela depois da chefe sairia do nada sem alguém ter dito antes que ela está
+        /// lá. Dita aqui, nos primeiros dez segundos, ela transforma a fase inteira numa
+        /// promessa — e é onde entra a regra de que cada região da floresta tem uma
+        /// árvore sagrada só dela.</para>
+        /// </summary>
         [TextArea]
         [SerializeField]
-        private string waranaLine = "A corrupção de Jurupari está se espalhando pela floresta.";
+        private string[] waranaLines =
+        {
+            "Olhe o que Jurupari fez com esta mata, Piatã.",
+            "A árvore sagrada desta região ainda resiste. Chegue até ela.",
+        };
+
+        [Tooltip("Silêncio entre duas falas seguidas da abertura.")]
+        [SerializeField] private float gapBetweenLines = 0.4f;
 
         [Tooltip("Voz de Waraná. Opcional — sem clip a fala entra em silêncio.")]
         [SerializeField] private AudioSource voiceSource;
@@ -82,7 +98,7 @@ namespace Warana.Gameplay
 
             yield return Fade(fadeGroup, 0f, fadeInDuration);
 
-            yield return SpeakWaranaLine();
+            yield return SpeakWaranaLines();
 
             // Controle devolvido: daqui em diante os comandos na tela valem de verdade.
             if (playerController != null) playerController.FreezeControl(false);
@@ -114,27 +130,41 @@ namespace Warana.Gameplay
             _skip = null;
         }
 
-        private IEnumerator SpeakWaranaLine()
+        private IEnumerator SpeakWaranaLines()
         {
-            if (dialogueGroup == null || dialogueText == null) yield break;
+            if (dialogueGroup == null || dialogueText == null || waranaLines == null) yield break;
 
-            dialogueText.text = waranaLine;
+            bool first = true;
 
-            if (voiceSource != null && voiceClip != null)
+            foreach (string line in waranaLines)
             {
-                voiceSource.clip = voiceClip;
-                voiceSource.Play();
+                if (string.IsNullOrEmpty(line)) continue;
+                if (_skipRequested) break;
+
+                dialogueText.text = line;
+
+                // A voz toca só na primeira: o mesmo clipe repetido a cada linha entrega
+                // que é um stinger de chegada, não fala.
+                bool playVoice = first && voiceSource != null && voiceClip != null;
+                if (playVoice)
+                {
+                    voiceSource.clip = voiceClip;
+                    voiceSource.Play();
+                }
+
+                yield return Fade(dialogueGroup, 1f, textFadeDuration);
+
+                yield return Wait(Mathf.Max(lineHold, playVoice ? voiceClip.length : 0f));
+
+                yield return Fade(dialogueGroup, 0f, textFadeDuration);
+
+                if (!_skipRequested) yield return Wait(gapBetweenLines);
+
+                first = false;
             }
-
-            yield return Fade(dialogueGroup, 1f, textFadeDuration);
-
-            float hold = Mathf.Max(lineHold, voiceClip != null ? voiceClip.length : 0f);
-            yield return Wait(hold);
 
             // A voz continuaria tocando por cima do jogo depois do texto sumir.
             if (_skipRequested && voiceSource != null && voiceSource.isPlaying) voiceSource.Stop();
-
-            yield return Fade(dialogueGroup, 0f, textFadeDuration);
         }
 
         private IEnumerator ShowControls()

@@ -93,6 +93,7 @@ namespace Warana.Enemies
         private float _staggerLeft;
         private float _giveUpLeft;
         private bool _struck;
+        private bool _corpseSettled;
         private float _spawnX;
 
         private readonly List<Collider2D> _hits = new List<Collider2D>();
@@ -123,6 +124,7 @@ namespace Warana.Enemies
             _staggerLeft = 0f;
             _giveUpLeft = 0f;
             _struck = false;
+            _corpseSettled = false;
             _spawnX = transform.position.x;
 
             if (_health == null) return;
@@ -156,7 +158,7 @@ namespace Warana.Enemies
                 case State.Strike: TickStrike(); break;
                 case State.Sheathe: TickSheathe(); break;
                 case State.Hurt: TickHurt(); break;
-                case State.Dead: _controller.Stop(); break;
+                case State.Dead: TickDead(); break;
             }
         }
 
@@ -349,19 +351,43 @@ namespace Warana.Enemies
             Enter(State.Hurt);
         }
 
+        /// <summary>
+        /// O cadáver cai até o chão e para lá. Enquanto não pousa, o controller segue
+        /// ligado só pela gravidade — é o que deixa o inimigo morto no ar (arremessado
+        /// pelo golpe que o matou) descer em vez de congelar no meio do salto.
+        /// </summary>
+        private void TickDead()
+        {
+            _controller.Stop();
+
+            // O arremesso do golpe fatal vale para o cadáver também: travar o corpo no
+            // frame da morte engoliria justamente o empurrão que dá impacto ao golpe.
+            if (_corpseSettled || _controller.IsKnockedBack || !_controller.IsGrounded) return;
+
+            _corpseSettled = true;
+
+            // Só agora o corpo sai da física: parado no chão, ele não empurra mais o
+            // jogador nem escorrega, e a animação de morte roda até o fim no lugar.
+            _controller.Body.linearVelocity = Vector2.zero;
+            _controller.enabled = false;
+            _controller.Body.simulated = false;
+
+            foreach (Collider2D collider in GetComponentsInChildren<Collider2D>())
+                collider.enabled = false;
+        }
+
         private void OnDied()
         {
             if (_state == State.Dead) return;
 
             Enter(State.Dead);
             _controller.Stop();
-            _controller.Body.linearVelocity = Vector2.zero;
+            _corpseSettled = false;
 
-            // Um cadáver não empurra nem apanha, mas continua caindo até o chão —
-            // por isso os colliders saem e o Rigidbody fica.
-            foreach (Collider2D collider in GetComponentsInChildren<Collider2D>())
-                collider.enabled = false;
-
+            // O corpo mantém a velocidade do golpe que o matou e continua caindo: é o
+            // TickDead que o desliga, quando encostar no chão. Desligar os colliders
+            // aqui — como era antes — tirava o chão de baixo do cadáver, e o inimigo
+            // atravessava o mapa no meio da própria animação de morte.
             if (despawnDelay >= 0f)
             {
                 float clip = MadGhostAnimation.DurationOf(MadGhostAnimation.State.Death);

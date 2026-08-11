@@ -1,6 +1,7 @@
 using UnityEngine;
 using Warana.Combat;
 using Warana.Enemies;
+using Warana.UI;
 
 namespace Warana.Gameplay
 {
@@ -23,6 +24,13 @@ namespace Warana.Gameplay
         [SerializeField] private int killsForExtraBolt = 4;
 
         [SerializeField] private int extraBoltAmount = 1;
+
+        [Header("Falas")]
+        [Tooltip("Dita quando o coração extra é concedido. Vazia = concedido em silêncio.")]
+        [SerializeField] private string heartLine = "A mata te devolve um pouco do fôlego.";
+
+        [Tooltip("Dita quando a carga extra é concedida. Vazia = concedida em silêncio.")]
+        [SerializeField] private string boltLine = "Mais um fio da minha força. Use bem.";
 
         [Header("Vinculação")]
         [Tooltip("Vazio = procura o Health do objeto com a tag Player.")]
@@ -56,16 +64,21 @@ namespace Warana.Gameplay
         {
             _kills++;
 
+            // As recompensas eram concedidas em silêncio: o coração e a carga apareciam
+            // na HUD no mesmo instante em que o inimigo caía, e a atenção do jogador
+            // estava no inimigo. Dizer o que aconteceu é o que faz o marco existir.
             if (!_heartGranted && _kills >= killsForExtraHeart)
             {
                 _heartGranted = true;
                 if (playerHealth != null) playerHealth.IncreaseMaxHealth(extraHeartAmount);
+                if (WaranaVoice.Instance != null) WaranaVoice.Instance.Say(heartLine);
             }
 
             if (!_boltGranted && _kills >= killsForExtraBolt)
             {
                 _boltGranted = true;
                 if (playerBoltCharges != null) playerBoltCharges.IncreaseMaxCharges(extraBoltAmount);
+                if (WaranaVoice.Instance != null) WaranaVoice.Instance.Say(boltLine);
             }
         }
     }

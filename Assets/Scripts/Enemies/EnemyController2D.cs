@@ -50,6 +50,19 @@ namespace Warana.Enemies
         [Tooltip("Profundidade da busca por chão à frente. Maior = aceita degraus mais fundos.")]
         [SerializeField] private float ledgeProbeDepth = 0.5f;
 
+        [Header("Repulsão de dano")]
+        [Tooltip("Velocidade horizontal do arremesso ao apanhar. É o que dá peso ao golpe.")]
+        [SerializeField] private float hitPushSpeed = 8.5f;
+
+        [Tooltip("Empurrão para cima junto com o arremesso. Um pulinho tira o inimigo do chão e o impacto lê melhor.")]
+        [SerializeField] private float hitPushLift = 3.5f;
+
+        [Tooltip("Tempo mínimo sem controle da IA depois de apanhar. Curto demais e o inimigo cancela o próprio arremesso.")]
+        [SerializeField] private float hitPushMinDuration = 0.18f;
+
+        [Tooltip("Quão rápido o arremesso perde força. 0 = desliza até o fim do empurrão.")]
+        [SerializeField] private float hitPushDrag = 26f;
+
         [Header("Travamento")]
         [Tooltip("Tempo empurrando sem sair do lugar até se dar por preso. 0 = desliga a checagem.")]
         [SerializeField] private float stuckTime = 0.3f;
@@ -74,6 +87,9 @@ namespace Warana.Enemies
 
         public Rigidbody2D Body => _rb;
 
+        /// <summary>True enquanto o arremesso de dano ainda manda no corpo.</summary>
+        public bool IsKnockedBack => _knockbackTimeLeft > 0f;
+
         /// <summary>Velocidade horizontal atual, com sinal.</summary>
         public float VelocityX => _rb.linearVelocity.x;
 
@@ -91,6 +107,15 @@ namespace Warana.Enemies
             if (_knockbackTimeLeft > 0f)
             {
                 _knockbackTimeLeft -= Time.fixedDeltaTime;
+
+                // O arremesso desacelera sozinho em vez de acabar de supetão: um corte
+                // seco na velocidade lê como o inimigo batendo numa parede invisível.
+                if (hitPushDrag > 0f)
+                {
+                    float damped = Mathf.MoveTowards(_rb.linearVelocity.x, 0f, hitPushDrag * Time.fixedDeltaTime);
+                    _rb.linearVelocity = new Vector2(damped, _rb.linearVelocity.y);
+                }
+
                 ApplyGravity();
                 _targetSpeed = 0f;
                 _stuckFor = 0f;
@@ -109,13 +134,26 @@ namespace Warana.Enemies
         }
 
         /// <summary>
-        /// Empurrão de dano: aplica a velocidade e suspende a locomoção da IA por
-        /// <paramref name="duration"/> segundos, deixando só a gravidade agir.
+        /// Empurrão de dano: arremessa o inimigo para longe e suspende a locomoção da
+        /// IA enquanto o arremesso dura, deixando só a gravidade agir.
+        ///
+        /// <para>Do <paramref name="velocity"/> só se aproveita a direção. A força é a
+        /// daqui de propósito: quem bate (lança, raio) sabe de onde veio o golpe, mas
+        /// quem tem o Rigidbody — e portanto sabe o que é uma repulsão que *parece*
+        /// impacto — é o recebedor. Manter a curva num lugar só também evita que cada
+        /// inimigo posto em cena carregue uma intensidade diferente, congelada no
+        /// momento em que foi arrastado para lá.</para>
         /// </summary>
         public void ApplyKnockback(Vector2 velocity, float duration)
         {
-            _rb.linearVelocity = velocity;
-            _knockbackTimeLeft = duration;
+            // Golpe perfeitamente vertical (ou nenhum): joga para trás de quem apanha.
+            float direction = Mathf.Approximately(velocity.x, 0f) ? -_facing : Mathf.Sign(velocity.x);
+
+            _rb.linearVelocity = new Vector2(
+                direction * hitPushSpeed,
+                Mathf.Max(_rb.linearVelocity.y, hitPushLift));
+
+            _knockbackTimeLeft = Mathf.Max(duration, hitPushMinDuration);
         }
 
         // ------------------------------------------------------------------ ordens

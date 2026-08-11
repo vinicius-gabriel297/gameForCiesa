@@ -63,6 +63,23 @@ namespace Warana.CameraRig
             _targetBody = target != null ? target.GetComponent<Rigidbody2D>() : null;
         }
 
+        public Vector2 BoundsMin => boundsMin;
+        public Vector2 BoundsMax => boundsMax;
+
+        /// <summary>
+        /// Redefine a área jogável em tempo de execução.
+        ///
+        /// <para>O final da fase precisa disso: a árvore sagrada fica além do limite
+        /// usado durante o combate, que existe para o jogador não passar da chefe.
+        /// Alargar na hora certa é o que transforma o limite em porta.</para>
+        /// </summary>
+        public void SetBounds(Vector2 min, Vector2 max)
+        {
+            boundsMin = min;
+            boundsMax = max;
+            useBounds = true;
+        }
+
         /// <summary>
         /// Pede um tremor de câmera. Um pedido mais forte substitui um tremor fraco em
         /// andamento; um pedido mais fraco nunca interrompe um mais forte.

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Warana.Combat;
 using Warana.Companion;
 using Warana.Enemies;
 using Warana.Player;
@@ -45,6 +46,9 @@ namespace Warana.Prologue
             "Mas, naquela noite... alguém já o aguardava.",
         };
 
+        [Tooltip("Silêncio entre duas narrações seguidas — é ele que dá compasso à sequência.")]
+        [SerializeField] private float narrationGap = 1.2f;
+
         [Header("Guardian Tree")]
         [Tooltip("Ponto onde o Player para ao chegar na árvore (normalmente logo antes do colisor sólido).")]
         [SerializeField] private Transform arrivalPoint;
@@ -55,6 +59,12 @@ namespace Warana.Prologue
         [Header("Emboscada do Catto")]
         [Tooltip("O gato enviado por Jurupari. Começa desativado na cena.")]
         [SerializeField] private CattoActor catto;
+
+        [Tooltip("Quanto tempo Piatã canaliza sozinho antes de o gato entrar. O ritual " +
+                 "precisa ser cortado no meio: esperar a Timeline inteira terminar " +
+                 "entregaria a bênção completa e só então traria o ataque, que é o " +
+                 "oposto do que a cena conta.")]
+        [SerializeField] private float cattoEntryDelay = 15f;
         [SerializeField] private AudioSource cattoAudioSource;
         [Tooltip("Som do miado ao aparecer. Opcional — sem clip, o gato só entra em silêncio.")]
         [SerializeField] private AudioClip meowClip;
@@ -66,7 +76,29 @@ namespace Warana.Prologue
         [Tooltip("Pausa depois do ataque, com Piatã já morto, antes de Waraná descer.")]
         [SerializeField] private float deathPause = 1.2f;
 
-        [Header("Raio (flash + som)")]
+        [Header("Raio (VFX + flash + som)")]
+        [Tooltip("O mesmo prefab do raio do jogo — Vefects/Zap VFX URP/.../VFX_Zap_03_Yellow. " +
+                 "Vazio = só o flash, como era antes.")]
+        [SerializeField] private GameObject boltPrefab;
+
+        [Tooltip("Altura acima do Catto de onde o raio desce.")]
+        [SerializeField] private float boltSkyHeight = 7f;
+
+        [Tooltip("Espessura do raio. Mesmo valor do SpiritBoltEmitter do Mapa 01.")]
+        [SerializeField] private float boltThickness = 0.22f;
+
+        [Tooltip("Ajuste fino do comprimento. 0,72 é o valor medido para o Zap VFX da Vefects.")]
+        [Range(0.2f, 2f)]
+        [SerializeField] private float boltLengthCalibration = 0.72f;
+
+        [SerializeField] private float boltLifetime = 1.2f;
+
+        [Tooltip("Sorting order do VFX, para o raio ficar à frente da arte da cena.")]
+        [SerializeField] private int boltSortingOrder = 30;
+
+        [Tooltip("Pausa entre o raio acertar o gato e a tela estourar em branco.")]
+        [SerializeField] private float boltToFlashDelay = 0.08f;
+
         [SerializeField] private CanvasGroup flashGroup;
         [SerializeField] private AudioSource sfxSource;
         [SerializeField] private AudioClip zapClip;
@@ -100,15 +132,25 @@ namespace Warana.Prologue
                  "quem pulou está com pressa.")]
         [SerializeField] private float skipFadeDuration = 0.6f;
 
-        /// <summary>Fala e a pausa depois dela. As rubricas entre parênteses do roteiro
-        /// (olhar, aproximar-se) viram só tempo — sem personagem animável para elas.</summary>
+        /// <summary>
+        /// Fala e a pausa depois dela. As rubricas entre parênteses do roteiro
+        /// (olhar, aproximar-se) viram só tempo — sem personagem animável para elas.
+        ///
+        /// <para>Piatã está desacordado: o Waraná fala com um corpo no chão, não com um
+        /// aprendiz de pé. Por isso nenhuma linha explica regra nem dá ordem de missão.
+        /// A narração 02 já disse que um guerreiro é escolhido a cada geração, então
+        /// repetir "você é o escolhido" gastaria a fala mais forte da cena com
+        /// informação que o jogador tem há três minutos; "eu escolhi você" põe a
+        /// escolha na boca de quem escolheu. A última linha deixa a bênção em aberto de
+        /// propósito — é a dívida que o final da fase vem pagar.</para>
+        /// </summary>
         private static readonly (string Line, float Pause)[] AmbushDialogue =
         {
-            ("Piatã... levante-se.", 1.0f),
-            ("A escuridão despertou.", 0.6f),
-            ("Jurupari enviou seus servos para impedir sua iniciação.", 0.6f),
-            ("Mas você é o escolhido.", 1.0f),
-            ("Proteja a floresta, juntos conseguiremos !", 1.2f),
+            ("Piatã... não é aqui que você cai.", 1.2f),
+            ("O gato de Jurupari veio no meio da sua bênção. De propósito.", 0.8f),
+            ("Ele não veio te matar. Veio te deixar sem mim.", 1.0f),
+            ("Foi por isso que eu desci em raio. Eu escolhi você.", 1.0f),
+            ("A bênção ficou pela metade. A floresta vai completar ela.", 1.4f),
         };
 
         private int _forwardSign = 1;
@@ -139,13 +181,12 @@ namespace Warana.Prologue
             yield return null; // deixa a pose de canalização assentar um frame antes da música
 
             treeCutsceneDirector.Play();
-            yield return new WaitUntil(() => treeCutsceneDirector.state != PlayState.Playing);
 
-            playerChannel.EndScripted();
-
-            // EndScripted() devolve o controle (é o comportamento normal de Stop());
-            // aqui a cena deve ficar em silêncio, então travamos de novo.
-            playerController.FreezeControl(true);
+            // A Timeline segue tocando por baixo da emboscada. Esperá-la terminar aqui
+            // era o que fazia a bênção acontecer inteira antes do gato aparecer — e a
+            // iniciação de Piatã é justamente a canalização que nunca terminou. Quem
+            // encerra o ritual é o golpe, lá dentro de RunAmbushSequence.
+            yield return new WaitForSeconds(cattoEntryDelay);
 
             yield return RunAmbushSequence();
         }
@@ -199,13 +240,31 @@ namespace Warana.Prologue
         private IEnumerator RunNarrationAndWalk()
         {
             yield return PlayAndWait(0);
+            yield return new WaitForSeconds(narrationGap);
             yield return PlayAndWait(1);
+            yield return new WaitForSeconds(narrationGap);
             yield return PlayAndWait(2);
 
-            yield return new WaitUntil(IsNearTree);
+            // A 04 quer duas coisas ao mesmo tempo: manter o compasso das outras três e
+            // cair um pouco antes da chegada. Só por distância, o silêncio entre a 03 e
+            // a 04 dependia de onde Piatã estivesse e esticava fora de ritmo; só por
+            // compasso, ela arriscava soar com a árvore já enquadrada. O que vier
+            // primeiro atende as duas.
+            yield return WaitForGapOrNearTree();
             StartCoroutine(PlayAndWait(3)); // não bloqueia: o áudio 04 toca enquanto Piatã ainda anda até a árvore
 
             yield return new WaitUntil(HasArrived);
+        }
+
+        private IEnumerator WaitForGapOrNearTree()
+        {
+            float elapsed = 0f;
+
+            while (elapsed < narrationGap && !IsNearTree())
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
         }
 
         /// <summary>Toca o áudio de narração de índice <paramref name="index"/> e mostra
@@ -271,7 +330,11 @@ namespace Warana.Prologue
             catto.PlayAttack();
             yield return new WaitForSeconds(CattoAnimation.DurationOf(CattoAnimation.State.Attack));
 
-            if (sfxSource != null && zapClip != null) sfxSource.PlayOneShot(zapClip);
+            // O golpe é o que quebra a canalização. A partir daqui a bênção está pela
+            // metade, que é a dívida que o Waraná cobra na última fala.
+            StopRitual();
+
+            yield return StrikeCatto();
             yield return FlashScreen();
 
             catto.gameObject.SetActive(false);
@@ -285,6 +348,50 @@ namespace Warana.Prologue
             yield return FadeTo(fadeGroup, 1f, finalFadeDuration);
 
             SceneManager.LoadScene(nextSceneName);
+        }
+
+        /// <summary>
+        /// Encerra a canalização pela metade e corta a Timeline junto. A música da
+        /// bênção não pode sobreviver ao golpe que interrompeu a bênção — o corte seco
+        /// é o som da coisa sendo quebrada, e não um bug de mixagem.
+        /// </summary>
+        private void StopRitual()
+        {
+            playerChannel.EndScripted();
+
+            // EndScripted() devolve o controle (é o comportamento normal de Stop());
+            // daqui até o fim a cena continua dirigida, então travamos de novo.
+            playerController.FreezeControl(true);
+
+            if (treeCutsceneDirector != null && treeCutsceneDirector.state == PlayState.Playing)
+                treeCutsceneDirector.Stop();
+        }
+
+        /// <summary>
+        /// O raio do Waraná cai no gato. É a primeira vez que ele age no mundo — ainda
+        /// sem corpo, sem fala e sem o jogador saber que ele existe — e é de propósito
+        /// o mesmo VFX que vira a arma do jogador no Mapa 01: quando o orbe descer e
+        /// disser "eu desci em raio", a frase tem uma imagem para apontar.
+        /// </summary>
+        private IEnumerator StrikeCatto()
+        {
+            Vector2 target = catto.transform.position;
+
+            BoltVfx.Spawn(
+                boltPrefab,
+                target + Vector2.up * boltSkyHeight,
+                target,
+                Vector3.up,
+                boltThickness,
+                boltLengthCalibration,
+                boltSortingOrder,
+                boltLifetime);
+
+            if (sfxSource != null && zapClip != null) sfxSource.PlayOneShot(zapClip);
+
+            // O estouro branco vem logo depois, não junto: com os dois no mesmo frame o
+            // flash come o raio e sobra só a tela piscando, que é o que já acontecia.
+            yield return new WaitForSeconds(boltToFlashDelay);
         }
 
         private IEnumerator FlashScreen()
@@ -324,11 +431,16 @@ namespace Warana.Prologue
 
         private IEnumerator SpeakLines()
         {
+            bool first = true;
+
             foreach ((string line, float pause) in AmbushDialogue)
             {
                 dialogueText.text = line;
 
-                if (waranaVoiceClip != null)
+                // A voz toca só na primeira fala: é o som do Waraná chegando, não uma
+                // sílaba por linha. Repetido nas cinco, o mesmo clipe curto entregava
+                // que era um stinger, e cada repetição doía mais que a anterior.
+                if (first && waranaVoiceClip != null)
                 {
                     narrationSource.clip = waranaVoiceClip;
                     narrationSource.Play();
@@ -336,11 +448,13 @@ namespace Warana.Prologue
 
                 yield return FadeTo(dialogueGroup, 1f, lineFadeDuration);
 
-                float hold = Mathf.Max(lineHoldFallback, waranaVoiceClip != null ? waranaVoiceClip.length : 0f);
-                yield return new WaitForSeconds(hold);
+                float voiceLength = first && waranaVoiceClip != null ? waranaVoiceClip.length : 0f;
+                yield return new WaitForSeconds(Mathf.Max(lineHoldFallback, voiceLength));
 
                 yield return FadeTo(dialogueGroup, 0f, lineFadeDuration);
                 yield return new WaitForSeconds(pause);
+
+                first = false;
             }
         }
 

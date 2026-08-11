@@ -54,7 +54,12 @@ namespace Warana.EditorTools
             new ClipDef(WaranaAnimation.State.Walk,   "Walking",      0, 0, 10f,   true),
             new ClipDef(WaranaAnimation.State.Jump,   "jumping",      0, 4, 14f,   false),
             new ClipDef(WaranaAnimation.State.Fall,   "jumping",      4, 2, 8f,    true),
-            new ClipDef(WaranaAnimation.State.Attack, "attack_true",  0, 0, 12.5f, false), // 5 frames = 0.4s, igual ao PlayerAttack
+            // Estocada de lança: 4 frames a 10 fps = 0,4 s, exatamente a duration do
+            // PlayerAttack — o clip não pode acabar antes da janela de dano nem se
+            // arrastar além dela. A 10 fps cada frame dura 0,1 s, então a janela de
+            // dano (0,10 s a 0,30 s) cai justamente nos dois frames com a lança
+            // estendida; o último frame é o recolhimento, que é a recuperação.
+            new ClipDef(WaranaAnimation.State.Attack, "attacking_thrusting", 0, 0, 10f, false),
             // A canalização não tem começo nem fim: ela dura o quanto o botão durar.
             // Por isso a pose de concentração é um loop lento, e não um golpe.
             new ClipDef(WaranaAnimation.State.Channel, "ataque_trovão", 0, 0, 10f, true),

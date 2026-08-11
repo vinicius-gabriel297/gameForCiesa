@@ -18,12 +18,21 @@ namespace Warana.Environment
 
         private Light2D _light;
 
+        /// <summary>
+        /// Multiplicador da respiração, para quem controla o *estado* da luz sem querer
+        /// conhecer o pulso. A restauração da floresta usa isto: o brilho da árvore
+        /// sagrada sobe junto com a cura e a pulsação continua. Escrever
+        /// <c>intensity</c> direto não funcionaria — o Update abaixo sobrescreveria no
+        /// frame seguinte.
+        /// </summary>
+        public float IntensityScale { get; set; } = 1f;
+
         private void Awake() => _light = GetComponent<Light2D>();
 
         private void Update()
         {
             float t = (Mathf.Sin(Time.time * (2f * Mathf.PI / period)) + 1f) * 0.5f;
-            _light.intensity = Mathf.Lerp(minIntensity, maxIntensity, t);
+            _light.intensity = Mathf.Lerp(minIntensity, maxIntensity, t) * IntensityScale;
         }
     }
 }

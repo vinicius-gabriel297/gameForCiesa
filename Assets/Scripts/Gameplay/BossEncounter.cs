@@ -14,6 +14,10 @@ namespace Warana.Gameplay
     /// As duas coisas moram juntas porque são a mesma coisa — o começo e o fim do
     /// mesmo combate. Separá-las obrigaria uma a avisar a outra só para saber quando
     /// parar a música que ela mesma começou.
+    ///
+    /// <para>O que vem *depois* da queda não é mais assunto daqui: existindo um
+    /// <see cref="EndingSequence"/> na cena, ele assume. Sem ele a fase termina no fade
+    /// com frase de sempre — é o caminho que continua funcionando com o final desligado.</para>
     /// </summary>
     [RequireComponent(typeof(EnemySenses2D))]
     [RequireComponent(typeof(Health))]
@@ -39,10 +43,28 @@ namespace Warana.Gameplay
         [Tooltip("Cena carregada depois do fade.")]
         [SerializeField] private string menuSceneName = "MainMenu";
 
+        [Header("Falas")]
+        [Tooltip("Dita quando a chefe percebe Piatã, junto da troca de trilha. Vazia = silêncio.")]
+        [TextArea]
+        [SerializeField] private string awareLine = "Isso já foi vivo, Piatã. Jurupari não mata — ele torce.";
+
+        [Tooltip("Ditas depois que a chefe cai, antes do fade. Só valem sem EndingSequence na cena.")]
+        [TextArea]
+        [SerializeField]
+        private string[] defeatLines =
+        {
+            "Acabou. Mas a mata ainda está doente, Piatã.",
+        };
+
+        [Header("Final")]
+        [Tooltip("Vazio = procura na cena. Sem EndingSequence, a fase termina aqui mesmo, " +
+                 "no fade com frase — que continua sendo o caminho testável quando o final está desligado.")]
+        [SerializeField] private EndingSequence ending;
+
         [Header("Epílogo")]
         [Tooltip("Frase escrita sobre a tela preta depois que a chefe cai.")]
         [TextArea]
-        [SerializeField] private string victoryMessage = "A floresta volta a respirar";
+        [SerializeField] private string victoryMessage = "Uma parte da floresta volta a respirar";
 
         [Tooltip("Entrada e saída da frase.")]
         [SerializeField] private float messageFadeDuration = 1f;
@@ -66,6 +88,8 @@ namespace Warana.Gameplay
 
             if (musicSource != null) _baseMusicVolume = musicSource.volume;
 
+            if (ending == null) ending = FindAnyObjectByType<EndingSequence>();
+
             // A fonte é pega agora, com a fase inteira ainda em pé: na hora do
             // epílogo a HUD e a abertura já podem ter sido desligadas.
             if (messageFont == null)
@@ -85,6 +109,11 @@ namespace Warana.Gameplay
 
             _battleStarted = true;
             if (musicSource != null && battleClip != null) StartCoroutine(SwapMusic());
+
+            // A Abomination entrava sem comentário nenhum, e sem isso ela é só um
+            // inimigo maior. A fala diz que ela já foi um bicho desta mata — o que
+            // torna matá-la uma perda, e não um troféu.
+            if (WaranaVoice.Instance != null) WaranaVoice.Instance.Say(awareLine);
         }
 
         private IEnumerator SwapMusic()
@@ -110,9 +139,27 @@ namespace Warana.Gameplay
         {
             yield return new WaitForSeconds(victoryDelay);
 
-            // A trilha desce junto com a imagem: música de luta a todo volume sobre
-            // uma tela já preta entrega que o corte foi só visual.
+            // A trilha de luta desce antes das falas, e não junto com a imagem: o
+            // Waraná fala sobre um campo que está esvaziando de som, em vez de gritar
+            // por cima de um combate que já acabou.
             if (musicSource != null) StartCoroutine(Fade(musicSource.volume, 0f, fadeDuration));
+
+            // Daqui em diante o final é de quem sabe encená-lo. Esta luta acaba quando
+            // a chefe cai; o que vem depois — a caminhada até a árvore sagrada, a cura —
+            // é outro assunto, e ele não pode viver pendurado num inimigo morto.
+            if (ending != null)
+            {
+                ending.Begin();
+                yield break;
+            }
+
+            // O epílogo não pode começar com uma frase ainda no ar: a tela preta
+            // apagaria a fala no meio.
+            if (WaranaVoice.Instance != null && defeatLines != null && defeatLines.Length > 0)
+            {
+                WaranaVoice.Instance.Say(defeatLines);
+                yield return WaranaVoice.Instance.WaitUntilSilent();
+            }
 
             ScreenFader.Get().FadeToBlackWithMessage(
                 menuSceneName, victoryMessage, fadeDuration, messageFadeDuration, messageHold, messageFont);
