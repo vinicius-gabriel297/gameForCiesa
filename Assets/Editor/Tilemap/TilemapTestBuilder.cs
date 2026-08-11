@@ -14,12 +14,15 @@ namespace Warana.EditorTools
     /// Monta um mapa greybox de 90x30 unidades em Tilemap, inspirado na abertura de Ori:
     /// campo aberto e largo, poucas plataformas, uma bacia no meio para descer e subir.
     ///
-    /// Cena própria — a sandbox de box colliders do <see cref="TestLevelBuilder"/> continua
-    /// intacta em scene_claude.
+    /// <b>Rascunho.</b> A cena que este builder gerava virou o <c>Prologo</c> e foi repintada
+    /// à mão desde então; a saída fica em <see cref="ScratchScene.Folder"/> e
+    /// <see cref="ScratchScene.CanWrite"/> recusa qualquer cena do Build Settings. Para
+    /// conferir autotile, prefira <see cref="AutoTileSandboxBuilder"/>, que isola as formas
+    /// difíceis em vez de espalhá-las por um mapa inteiro.
     /// </summary>
     public static class TilemapTestBuilder
     {
-        public const string ScenePath = "Assets/Scenes/TilemapTest.unity";
+        public const string ScenePath = ScratchScene.Folder + "/TilemapTest.unity";
 
         private const string RootName = "Scene";
         private const string GroundLayerName = "Ground";
@@ -93,7 +96,7 @@ namespace Warana.EditorTools
             ( 41f, 1.75f,  8f),
         };
 
-        [MenuItem("Waraná/Tilemap/Build Mapa de Teste")]
+        [MenuItem("Waraná/Tilemap/Rascunho/Build Mapa de Teste")]
         public static void Build()
         {
             var ground = AssetDatabase.LoadAssetAtPath<TileBase>(TilePaletteBuilder.GroundRuleTilePath);
@@ -107,8 +110,12 @@ namespace Warana.EditorTools
                 return;
             }
 
+            if (!ScratchScene.CanWrite(ScenePath)) return;
+
             // NewScene troca a cena aberta sem avisar; pergunta antes para não perder trabalho.
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+
+            ScratchScene.EnsureFolder();
 
             int groundLayer = TestLevelBuilder.EnsureLayer(GroundLayerName);
             PhysicsMaterial2D noFriction = TestLevelBuilder.EnsureNoFrictionMaterial();

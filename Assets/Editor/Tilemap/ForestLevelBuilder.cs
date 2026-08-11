@@ -17,12 +17,16 @@ namespace Warana.EditorTools
     /// pulo continua ligado), Player em modo caminhada, SEM ataque e SEM o Guaraná Eye.
     /// Fundo em duas camadas de parallax (céu + linha de árvores).
     ///
-    /// Cena própria em <see cref="ScenePath"/> — o greybox do <see cref="TilemapTestBuilder"/>
-    /// e a sandbox do <see cref="TestLevelBuilder"/> continuam intactos.
+    /// <b>Isto é rascunho, não a fase de verdade.</b> A cena que este builder gerava foi
+    /// renomeada para <c>Mapa_01</c> e desde então recebeu mais de 15 mil células pintadas à
+    /// mão, camadas novas e todo o encontro com a Abomination. Reconstruir do zero por cima
+    /// dela apagaria esse trabalho, então a saída fica em <see cref="ScratchScene.Folder"/> e
+    /// <see cref="ScratchScene.CanWrite"/> recusa qualquer cena do Build Settings. O que serve
+    /// aqui é o esqueleto: relevo de partida e parallax para começar uma fase nova.
     /// </summary>
     public static class ForestLevelBuilder
     {
-        public const string ScenePath = "Assets/Scenes/Fase01_Floresta.unity";
+        public const string ScenePath = ScratchScene.Folder + "/Fase01_Floresta.unity";
 
         private const string RootName = "Scene";
         private const string GroundLayerName = "Ground";
@@ -85,7 +89,7 @@ namespace Warana.EditorTools
 
         private const float PlatformThickness = 0.5f;
 
-        [MenuItem("Waraná/Tilemap/Build Fase 01 (Floresta)")]
+        [MenuItem("Waraná/Tilemap/Rascunho/Build Fase 01 (Floresta)")]
         public static void Build()
         {
             var ground = AssetDatabase.LoadAssetAtPath<TileBase>(ForestGroundTilePath);
@@ -97,8 +101,12 @@ namespace Warana.EditorTools
                 return;
             }
 
+            if (!ScratchScene.CanWrite(ScenePath)) return;
+
             // NewScene troca a cena aberta sem avisar; pergunta antes para não perder trabalho.
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+
+            ScratchScene.EnsureFolder();
 
             int groundLayer = TestLevelBuilder.EnsureLayer(GroundLayerName);
             PhysicsMaterial2D noFriction = TestLevelBuilder.EnsureNoFrictionMaterial();

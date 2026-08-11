@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEditor.Tilemaps;
 using UnityEngine;
@@ -8,9 +9,12 @@ namespace Warana.EditorTools
 {
     /// <summary>
     /// Transforma as folhas de tile já fatiadas pelo <see cref="LegacyFantasyImporter"/> em
-    /// assets de <see cref="Tile"/> e monta as Tile Palettes.
+    /// assets de <see cref="Tile"/>, monta os autotiles de <see cref="TerrainRuleTileBuilder"/>
+    /// e <see cref="WaterTileBuilder"/>, e pinta as Tile Palettes.
     ///
-    /// Idempotente: apaga e regera as pastas de saída.
+    /// Idempotente e cuidadoso com GUID: assets existentes são gravados por cima, nunca
+    /// apagados e recriados — <c>Mapa_01</c> e <c>Prologo</c> referenciam quase 24 mil células
+    /// destes tiles, e um GUID novo esvaziaria os dois mapas.
     /// </summary>
     public static class TilePaletteBuilder
     {
@@ -20,6 +24,9 @@ namespace Warana.EditorTools
         private const string TilesRoot = "Assets/Tiles";
         private const string PalettesRoot = "Assets/Palettes";
 
+        /// <summary>Palette só com os autotiles — sem ela eles se perdem no meio de 888 tiles.</summary>
+        private const string AutotileSetName = "Autotile";
+
         private const string DebugSheet =
             LegacyFantasyImporter.RootFolder +
             "/Legacy Fantasy - Debug Map/Legacy Fantasy - Debug Map/Assets/Tiles.png";
@@ -28,17 +35,17 @@ namespace Warana.EditorTools
             LegacyFantasyImporter.RootFolder +
             "/Legacy-Fantasy - High Forest 2.0/Legacy-Fantasy - High Forest 2.3/Assets/Tiles.png";
 
-        // Células escolhidas à mão na folha do Debug Map (índice = row * 26 + col, row 0 = topo).
-        // O bloco cinza de 64x64 é chapado com um contorno escuro de 1 px só no topo, e a
-        // célula (0,0) tem o texto "64" desenhado — daí pegarmos a coluna 1.
-        private const int GreyEdgeIndex = 1;   // row 0, col 1: linha escura em cima + cinza embaixo
-        private const int GreyFillIndex = 27;  // row 1, col 1: cinza chapado
-        private const int BrownFillIndex = 35; // row 1, col 9: mesma coisa no bloco marrom
+        /// <summary>row 1, col 9 do Debug Map: miolo chapado do bloco marrom (índice = row * 26 + col).</summary>
+        private const int BrownFillIndex = 35;
 
         public const string GroundRuleTilePath = TilesRoot + "/DebugMap/RT_Ground.asset";
 
         /// <summary>Bloco marrom chapado — silhueta de fundo, sem colisão.</summary>
         public static string BrownTilePath => $"{TilesRoot}/DebugMap/Tiles_{BrownFillIndex}.asset";
+
+        /// <summary>Caminho de um asset gerado, para quem precisa carregá-lo de volta.</summary>
+        public static string TilePath(string setName, string assetName) =>
+            $"{TilesRoot}/{setName}/{assetName}.asset";
 
         [MenuItem("Waraná/Tilemap/Gerar Tiles e Palettes")]
         public static void BuildAll()
@@ -46,20 +53,28 @@ namespace Warana.EditorTools
             EnsureFolder(TilesRoot);
             EnsureFolder(PalettesRoot);
 
-            int debug = BuildSet(DebugSheet, "DebugMap");
-            int forest = BuildSet(ForestSheet, "HighForest");
+            var autotiles = new List<TileBase>();
+
+            int debug = BuildSet(DebugSheet, TerrainBlocks.DebugMapSet, autotiles);
+            int forest = BuildSet(ForestSheet, TerrainBlocks.HighForestSet, autotiles);
+
+            BuildPalette(AutotileSetName, null, 0, autotiles);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
             Debug.Log($"[TilePalette] DebugMap: {debug} tile(s). HighForest: {forest} tile(s). " +
+                      $"{autotiles.Count} autotile(s) na palette '{AutotileSetName}'. " +
                       $"Palettes em {PalettesRoot}, célula {CellSize} un.");
         }
 
         // -------------------------------------------------------------------------- tiles
 
-        /// <summary>Gera um Tile por sprite da folha e pinta a palette. Devolve quantos saíram.</summary>
-        private static int BuildSet(string sheetPath, string setName)
+        /// <summary>
+        /// Gera um Tile por sprite da folha, mais os autotiles do set. Devolve quantos Tiles
+        /// saíram e acumula os autotiles em <paramref name="autotiles"/>.
+        /// </summary>
+        private static int BuildSet(string sheetPath, string setName, List<TileBase> autotiles)
         {
             var sprites = LoadSprites(sheetPath);
             if (sprites.Count == 0)
@@ -117,11 +132,16 @@ namespace Warana.EditorTools
                 AssetDatabase.StopAssetEditing();
             }
 
-            List<TileBase> ruleTiles = BuildRuleTiles(setName, folder, sprites, columns);
-            foreach (TileBase ruleTile in ruleTiles) keep.Add(AssetDatabase.GetAssetPath(ruleTile));
+            List<TileBase> generated = BuildAutotiles(setName, folder, sprites, columns);
+
+            // O keep sai da MESMA lista que gerou os assets. Manter duas listas em paralelo é
+            // como as RuleTiles quase foram apagadas: esquecer um registro aqui faz
+            // RemoveStaleAssets levar o asset e o GUID junto.
+            foreach (TileBase tile in generated) keep.Add(AssetDatabase.GetAssetPath(tile));
+            autotiles.AddRange(generated);
 
             RemoveStaleAssets(folder, keep);
-            BuildPalette(setName, tiles, columns, ruleTiles);
+            BuildPalette(setName, tiles, columns, generated);
             return tiles.Count;
         }
 
@@ -144,42 +164,79 @@ namespace Warana.EditorTools
             return result;
         }
 
+        // ----------------------------------------------------------------------- autotiles
+
+        /// <summary>
+        /// Terrenos do catálogo mais, no High Forest, a água. Devolve na ordem em que vão
+        /// para a palette.
+        /// </summary>
+        private static List<TileBase> BuildAutotiles(
+            string setName, string folder, SortedDictionary<int, Sprite> sprites, int columns)
+        {
+            var result = new List<TileBase>();
+
+            foreach (TerrainBlock block in TerrainBlocks.For(setName))
+            {
+                RuleTile ruleTile = TerrainRuleTileBuilder.Build(
+                    block, sprites, columns, $"{folder}/{block.AssetName}.asset");
+
+                if (ruleTile != null) result.Add(ruleTile);
+            }
+
+            if (setName == TerrainBlocks.HighForestSet)
+            {
+                result.AddRange(WaterTileBuilder.Build(folder, sprites));
+            }
+
+            return result;
+        }
+
         // ------------------------------------------------------------------------ palette
 
+        /// <summary>
+        /// Pinta a palette do set. <paramref name="tiles"/> nulo monta só a faixa de
+        /// <paramref name="special"/> — é assim que a palette 'Autotile' é montada.
+        /// </summary>
         private static void BuildPalette(
-            string setName, Dictionary<int, Tile> tiles, int columns, List<TileBase> ruleTiles)
+            string setName, Dictionary<int, Tile> tiles, int columns, List<TileBase> special)
         {
             string path = $"{PalettesRoot}/{setName}.prefab";
 
-            // CreateNewPalette usa GenerateUniqueAssetPath: sem apagar antes viraria "DebugMap 1".
-            AssetDatabase.DeleteAsset(path);
-
-            GridPaletteUtility.CreateNewPalette(
-                PalettesRoot,
-                setName,
-                GridLayout.CellLayout.Rectangle,
-                GridPalette.CellSizing.Manual,
-                new Vector3(CellSize, CellSize, 0f),
-                GridLayout.CellSwizzle.XYZ);
+            // Recriar do zero trocaria o GUID do prefab a cada execução, e a janela Tile
+            // Palette perderia a seleção. Só chama CreateNewPalette quando não existe nada.
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(path) == null)
+            {
+                GridPaletteUtility.CreateNewPalette(
+                    PalettesRoot,
+                    setName,
+                    GridLayout.CellLayout.Rectangle,
+                    GridPalette.CellSizing.Manual,
+                    new Vector3(CellSize, CellSize, 0f),
+                    GridLayout.CellSwizzle.XYZ);
+            }
 
             GameObject root = PrefabUtility.LoadPrefabContents(path);
             try
             {
                 var tilemap = root.GetComponentInChildren<Tilemap>();
+                tilemap.ClearAllTiles();
 
-                // Mesma disposição da folha: coluna cresce para a direita, linha para baixo.
-                foreach (var pair in tiles)
+                if (tiles != null)
                 {
-                    int col = pair.Key % columns;
-                    int row = pair.Key / columns;
-                    tilemap.SetTile(new Vector3Int(col, -row, 0), pair.Value);
+                    // Mesma disposição da folha: coluna cresce para a direita, linha para baixo.
+                    foreach (var pair in tiles)
+                    {
+                        int col = pair.Key % columns;
+                        int row = pair.Key / columns;
+                        tilemap.SetTile(new Vector3Int(col, -row, 0), pair.Value);
+                    }
                 }
 
-                // As RuleTiles ficam numa faixa própria acima da folha, senão não haveria
-                // como pintar com elas sem arrastar o asset para a janela na mão.
-                for (int i = 0; i < ruleTiles.Count; i++)
+                // Os autotiles ficam numa faixa própria acima da folha, senão não haveria
+                // como pintar com eles sem arrastar o asset para a janela na mão.
+                for (int i = 0; i < special.Count; i++)
                 {
-                    tilemap.SetTile(new Vector3Int(i, 2, 0), ruleTiles[i]);
+                    tilemap.SetTile(new Vector3Int(i, 2, 0), special[i]);
                 }
 
                 tilemap.CompressBounds();
@@ -191,187 +248,29 @@ namespace Warana.EditorTools
             }
         }
 
-        // ----------------------------------------------------------------------- ruletile
-
-        /// <summary>Gera as RuleTiles de cada folha. Devolve-as na ordem em que vão para a palette.</summary>
-        private static List<TileBase> BuildRuleTiles(
-            string setName, string folder, SortedDictionary<int, Sprite> sprites, int columns)
-        {
-            var result = new List<TileBase>();
-
-            if (setName == "DebugMap")
-            {
-                result.Add(BuildGreyboxRuleTile(folder, sprites));
-            }
-            else if (setName == "HighForest")
-            {
-                // Os dois blocos de terreno da folha têm o mesmo desenho 5x4: uma coluna de
-                // borda de cada lado, uma linha de topo e uma de base, e o miolo no meio.
-                result.Add(BuildNineSliceRuleTile(
-                    $"{folder}/RT_Forest_Grass.asset", sprites, columns,
-                    colLeft: 0, colRight: 4, rowTop: 1, rowBottom: 4));
-
-                result.Add(BuildNineSliceRuleTile(
-                    $"{folder}/RT_Forest_Rock.asset", sprites, columns,
-                    colLeft: 0, colRight: 4, rowTop: 6, rowBottom: 9));
-            }
-
-            result.RemoveAll(tile => tile == null);
-            return result;
-        }
+        // -------------------------------------------------------------------------- pastas
 
         /// <summary>
-        /// RuleTile do greybox: uma única regra — se não tem vizinho em cima, usa a célula com
-        /// a linha escura; senão, cinza chapado. O pacote não traz blob de autotile (o bloco é
-        /// chapado, com contorno só no topo e na esquerda), então dá para fazer só a superfície —
-        /// que é justamente o que precisa ficar legível num teste de plataforma.
+        /// Apaga assets que sobraram de uma execução anterior (folha remontada, regra
+        /// renomeada). Varre o disco em vez de usar FindAssets("t:TileBase"): o filtro por
+        /// tipo depende de como a Unity indexa subclasse de ScriptableObject, e aqui um falso
+        /// negativo apaga um asset e o GUID dele.
         /// </summary>
-        private static TileBase BuildGreyboxRuleTile(string folder, SortedDictionary<int, Sprite> sprites)
-        {
-            if (!sprites.TryGetValue(GreyEdgeIndex, out Sprite edge) ||
-                !sprites.TryGetValue(GreyFillIndex, out Sprite fill))
-            {
-                Debug.LogError("[TilePalette] Não achei as células cinza do Debug Map para a RuleTile.");
-                return null;
-            }
-
-            var ruleTile = ScriptableObject.CreateInstance<RuleTile>();
-            ruleTile.m_DefaultSprite = fill;
-            ruleTile.m_DefaultColliderType = Tile.ColliderType.Grid;
-            ruleTile.m_TilingRules = new List<RuleTile.TilingRule>
-            {
-                Rule(new[] { edge }, (Vector3Int.up, false)),
-            };
-
-            return Save(ruleTile, folder + "/RT_Ground.asset");
-        }
-
-        /// <summary>
-        /// Nine-slice a partir de um bloco retangular da folha: as quatro quinas, as quatro
-        /// bordas e o miolo. As variantes do meio de cada faixa entram como saída aleatória,
-        /// então uma parede longa não fica com a mesma pedra repetida.
-        ///
-        /// A ordem das regras importa — a primeira que casar vence. As de topo vêm antes das
-        /// de base de propósito: numa plataforma de um tile de espessura os dois lados estão
-        /// expostos, e o que tem que aparecer é a grama.
-        /// </summary>
-        private static TileBase BuildNineSliceRuleTile(
-            string path, SortedDictionary<int, Sprite> sprites, int columns,
-            int colLeft, int colRight, int rowTop, int rowBottom)
-        {
-            Sprite[] Cells(int rowFrom, int rowTo, int colFrom, int colTo)
-            {
-                var found = new List<Sprite>();
-                for (int row = rowFrom; row <= rowTo; row++)
-                {
-                    for (int col = colFrom; col <= colTo; col++)
-                    {
-                        if (sprites.TryGetValue(row * columns + col, out Sprite sprite)) found.Add(sprite);
-                    }
-                }
-
-                return found.ToArray();
-            }
-
-            int midColFrom = colLeft + 1, midColTo = colRight - 1;
-            int midRowFrom = rowTop + 1, midRowTo = rowBottom - 1;
-
-            Sprite[] topLeft = Cells(rowTop, rowTop, colLeft, colLeft);
-            Sprite[] top = Cells(rowTop, rowTop, midColFrom, midColTo);
-            Sprite[] topRight = Cells(rowTop, rowTop, colRight, colRight);
-            Sprite[] left = Cells(midRowFrom, midRowTo, colLeft, colLeft);
-            Sprite[] center = Cells(midRowFrom, midRowTo, midColFrom, midColTo);
-            Sprite[] right = Cells(midRowFrom, midRowTo, colRight, colRight);
-            Sprite[] bottomLeft = Cells(rowBottom, rowBottom, colLeft, colLeft);
-            Sprite[] bottom = Cells(rowBottom, rowBottom, midColFrom, midColTo);
-            Sprite[] bottomRight = Cells(rowBottom, rowBottom, colRight, colRight);
-
-            if (center.Length == 0)
-            {
-                Debug.LogError($"[TilePalette] Bloco de terreno vazio para '{path}'.");
-                return null;
-            }
-
-            var ruleTile = ScriptableObject.CreateInstance<RuleTile>();
-            ruleTile.m_DefaultSprite = center[0];
-            ruleTile.m_DefaultColliderType = Tile.ColliderType.Grid;
-            ruleTile.m_TilingRules = new List<RuleTile.TilingRule>
-            {
-                Rule(topLeft,     (Vector3Int.up, false),   (Vector3Int.left, false)),
-                Rule(topRight,    (Vector3Int.up, false),   (Vector3Int.right, false)),
-                Rule(top,         (Vector3Int.up, false)),
-                Rule(bottomLeft,  (Vector3Int.down, false), (Vector3Int.left, false)),
-                Rule(bottomRight, (Vector3Int.down, false), (Vector3Int.right, false)),
-                Rule(bottom,      (Vector3Int.down, false)),
-                Rule(left,        (Vector3Int.left, false)),
-                Rule(right,       (Vector3Int.right, false)),
-                Rule(center), // sem vizinho declarado: casa com tudo que sobrou
-            };
-
-            return Save(ruleTile, path);
-        }
-
-        /// <summary>
-        /// Uma regra do RuleTile. Cada vizinho é (direção, precisa ser do mesmo tile).
-        /// Com mais de um sprite a saída vira aleatória, sem rotacionar nem espelhar —
-        /// terreno espelhado ficaria com a borda para o lado errado.
-        /// </summary>
-        private static RuleTile.TilingRule Rule(Sprite[] variants, params (Vector3Int dir, bool isThis)[] neighbors)
-        {
-            var rule = new RuleTile.TilingRule
-            {
-                m_Sprites = variants,
-                m_ColliderType = Tile.ColliderType.Grid,
-                m_RuleTransform = RuleTile.TilingRuleOutput.Transform.Fixed,
-                m_RandomTransform = RuleTile.TilingRuleOutput.Transform.Fixed,
-                m_Output = variants.Length > 1
-                    ? RuleTile.TilingRuleOutput.OutputSprite.Random
-                    : RuleTile.TilingRuleOutput.OutputSprite.Single,
-                m_NeighborPositions = new List<Vector3Int>(neighbors.Length),
-                m_Neighbors = new List<int>(neighbors.Length),
-            };
-
-            foreach ((Vector3Int dir, bool isThis) in neighbors)
-            {
-                rule.m_NeighborPositions.Add(dir);
-                rule.m_Neighbors.Add(isThis
-                    ? RuleTile.TilingRule.Neighbor.This
-                    : RuleTile.TilingRule.Neighbor.NotThis);
-            }
-
-            return rule;
-        }
-
-        /// <summary>
-        /// Grava por cima do asset existente em vez de apagar e recriar — o GUID tem que
-        /// sobreviver, senão as cenas pintadas com esta RuleTile ficam vazias.
-        /// </summary>
-        private static TileBase Save(RuleTile ruleTile, string path)
-        {
-            var existing = AssetDatabase.LoadAssetAtPath<RuleTile>(path);
-            if (existing == null)
-            {
-                AssetDatabase.CreateAsset(ruleTile, path);
-                return ruleTile;
-            }
-
-            EditorUtility.CopySerialized(ruleTile, existing);
-            EditorUtility.SetDirty(existing);
-            Object.DestroyImmediate(ruleTile);
-            return existing;
-        }
-
-        /// <summary>Apaga assets que sobraram de uma execução anterior (folha remontada, regra renomeada).</summary>
         private static void RemoveStaleAssets(string folder, HashSet<string> keep)
         {
-            foreach (string guid in AssetDatabase.FindAssets("t:TileBase", new[] { folder }))
+            string root = Directory.GetParent(Application.dataPath)!.FullName;
+            string fullFolder = Path.Combine(root, folder);
+            if (!Directory.Exists(fullFolder)) return;
+
+            foreach (string file in Directory.GetFiles(fullFolder, "*.asset"))
             {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                if (!keep.Contains(path)) AssetDatabase.DeleteAsset(path);
+                string path = $"{folder}/{Path.GetFileName(file)}";
+                if (keep.Contains(path)) continue;
+                if (AssetDatabase.LoadAssetAtPath<TileBase>(path) == null) continue;
+
+                AssetDatabase.DeleteAsset(path);
             }
         }
-
-        // ------------------------------------------------------------------------- pastas
 
         private static void EnsureFolder(string path)
         {
@@ -380,6 +279,5 @@ namespace Warana.EditorTools
             int slash = path.LastIndexOf('/');
             AssetDatabase.CreateFolder(path[..slash], path[(slash + 1)..]);
         }
-
     }
 }
